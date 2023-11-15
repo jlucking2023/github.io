@@ -11,14 +11,6 @@ YouTube Videos
 - [Data Quality](https://youtu.be/dUhzjX0eabM)
 - [Data Lineage](https://youtu.be/E8pjUZK62BI)
 
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
 ---------------------------
 Acronyms
 IL: InsuranceLake
