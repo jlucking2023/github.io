@@ -35,18 +35,32 @@ metadata (the instructions);
 code (the execution engine).
 
 # Collect Data
-CSV Files
-Fixed W3idth Files
-Excel Files
+
+---------------------------
+**CSV Files
+
+
+---------------------------
+**Fixed Width Files
+
+
+---------------------------
+**Excel Files
+
 
 # Cleanse Data
-Mapping
-Transforms
-Data Quality Rules
+---------------------------
+**Mapping
+---------------------------
+**Transforms
+---------------------------
+**Data Quality Rules
 
 # Consume Data
-Spark SQL
-Athena SQL
+---------------------------
+**Spark SQL
+---------------------------
+**Athena SQL
 
 # Monitor Data Quality
 # MonitorData Lineage
