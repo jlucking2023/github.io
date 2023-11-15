@@ -3,12 +3,14 @@ InsuranceLake was built to process batch files by mapping source to target colum
 
 ---------------------------
 YouTube Videos
-[8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
-[]()
-[]()
-[]()
-[Data Quality](https://youtu.be/dUhzjX0eabM)
-[Data Lineage](https://youtu.be/E8pjUZK62BI)
+
+- [8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
+- [Part 1 - CodePipeline, Verisk Data, Build a Transform & Unit Test with Code Whisperer](https://youtu.be/2c4hopaboVs)
+- [Part 2 - Run Collect to Cleanse](https://youtu.be/l2r2lBW2zXw)
+- [Part 3 - Run Cleanse to Consume & View Verisk Data](https://youtu.be/MayAPuUMvcg)
+- [Data Quality](https://youtu.be/dUhzjX0eabM)
+- [Data Lineage](https://youtu.be/E8pjUZK62BI)
+
 
 ```mermaid
 graph TD;
