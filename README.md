@@ -9,7 +9,7 @@ Architectural Principles
 AWS Services:
 1. S3 - stores the incoming data files as well as the Apache Parquet Files
 2. Lambda
-3. Step Functions: executes the Collect to Cleanse and the Cleanse to Consume Glue Jobs
+3. Step Functions: executes the Collect to Cleanse, the Cleanse to Consume, and the Entity Match Glue Jobs
 4. Glue
 5. DynamoDB
 6. Athena
@@ -41,9 +41,24 @@ Athena SQL
 
 # Using Transforms
 discuss how order and reuse in json file is important
-Transform1
-Transform2
-etc...
+
+# Data Manipulation
+- Lookup
+- MultiValueLookup
+- AddColumns
+- MergeColumns
+
+# Data Security
+- Redact
+- Hash
+- Tokenize
+
+# Formatting
+- Date
+- Decimal
+
+# Entity Match
+
 
 # Operation
 Partitions
