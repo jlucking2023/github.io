@@ -42,29 +42,82 @@ Athena SQL
 # Using Transforms
 discuss how order and reuse in json file is important
 
-# Data Manipulation
-- "flipsign": [{"field": "Balance"},{"field": "NewAccountBalance","source": "AccountBalance"}]
-- "literal": {"source": "syntheticdata"}
-- Lookup
-- MultiValueLookup
-- AddColumns
-- "merge": [{"field": "insuredstatemerge","source_list": ["insuredstatename", "insuredstatecode"],"default": "Unknown"}]
+---------------------------
+#Formatting
+---------------------------
+- currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
 
-# Data Security
-- "redact": {"CustomerNo": "****"}
-- "hash": ["InsuredContactCellPhone","InsuredContactEmail"]
-- "tokenize": ["EIN"]
 
-# Formatting
-- Date
-- "decimal": [{"field": "ExpiringPremiumAmount","format": "10,2"},{"field": "WrittenPremiumAmount","format": "10,2"},{"field": "EarnedPremium","format": "10,2"}]
-- "implieddecimal": [{"field": "indemnity_paid_current_period","format": "16,2"}]
-- "timestamp":[{"field": "GenerationDate","format": "yyyy-MM-dd HH:mm:ss.SSS+0000"}]
+- date : Convert specified date fields to ISO format based on known input format
 
+- decimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type
+  "decimal": [{"field": "ExpiringPremiumAmount","format": "10,2"},{"field": "WrittenPremiumAmount","format": "10,2"},{"field": "EarnedPremium","format": "10,2"}]
+
+- implieddecimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
+  "implieddecimal": [{"field": "indemnity_paid_current_period","format": "16,2"}]
+
+- timestamp	Convert specified date/time fields to ISO format based on known input format
+  "timestamp":[{"field": "GenerationDate","format": "yyyy-MM-dd HH:mm:ss.SSS+0000"}]
+
+---------------------------
+#Data Manipulation
+---------------------------
+- addcolumns : Add two or more columns together in a new column
+
+
+- columnfromcolumn : Add column to DataFrame based on regexp pattern on another column
+
+
+- combinecolumns : Add column to DataFrame using format string and source columns
+
+
+- filename : Add column to DataFrame based on regexp pattern on the filename argument to the Glue job
+
+
+- filterrows : Filter out rows based on standard SQL WHERE statement
+
+
+- flipsign : Flip the sign of a numeric column in a Spark DataFrame, optionally in a new column 
+  "flipsign": [{"field": "Balance"},{"field": "NewAccountBalance","source": "AccountBalance"}]
+
+- literal : Add column to DataFrame with static/literal value supplied in specification 
+  "literal": {"source": "syntheticdata"}
+
+- lookup : Replace specified column values with values looked up from an external table
+  
+
+- multilookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
+
+
+- merge : Merge columns using coalesce 
+  "merge": [{"field": "insuredstatemerge","source_list": ["insuredstatename", "insuredstatecode"],"default": "Unknown"}]
+
+---------------------------
+#Data Security
+---------------------------
+- redact : Redact specified column values using supplied redaction string
+  "redact": {"CustomerNo": "****"}
+
+- hash : Hash specified column values using SHA256 and Spark UDF
+  "hash": ["InsuredContactCellPhone","InsuredContactEmail"]
+
+- tokenize : Replace specified column values with hash and store original value in separate table
+  "tokenize": ["EIN"]
+
+---------------------------
 #Earned Premium
-- "expandpolicymonths": {"uniqueid": "generated_policy_number","policy_month_start_field": "StartDate","policy_month_end_field": "EndDate","policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate"}
-- "policymonths": [{"field": "CalcNumMonths","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date":"ExpirationDate","normalized": true}]
-- "earnedpremium": [{"field": "CalcEarnedPremium","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate","period_start_date": "StartDate","period_end_date": "EndDate","byday": true}]
+---------------------------
+- enddate : Add a number of months to a specified date to get an ending/expiration date
+
+
+- expandpolicymonths : Expand dataset to one row for each month the policy is active with a calculated earned premium
+  "expandpolicymonths": {"uniqueid": "generated_policy_number","policy_month_start_field": "StartDate","policy_month_end_field": "EndDate","policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate"}
+
+- policymonths : Calculate number of months between policy start/end dates
+  "policymonths": [{"field": "CalcNumMonths","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date":"ExpirationDate","normalized": true}]
+
+- earnedpremium : Calculate monthly earned premium
+  "earnedpremium": [{"field": "CalcEarnedPremium","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate","period_start_date": "StartDate","period_end_date": "EndDate","byday": true}]
 
 # Entity Match
 
