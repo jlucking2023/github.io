@@ -1,13 +1,16 @@
 # Overview
-DIE Pattern: IL is based on Data files, Instruction files (CSV & JSON Metadata), and the generic Execution Engines (Glue PySpark Jobs).
-A scalable ingestion framework is build on 3 pillars:
-data (the subject);
-metadata (the instructions);
-code (the execution engine).
+InsuranceLake was built to process batch files by mapping source to target columns, transforming each column, and applying data quality rules. The most common type of batch file data sources are large delimited text files, Excel files, and fixed width files. InsuranceLake can be enhanced to accept change data capture, streaming, and document data sources. It is based on the Olympic Data Lake Pattern (bronze-silver-gold) which we call Collect, Cleanse, and Consume your data. Each incoming data source (e.g. a specific csv file with commercial auto policies from broker abc) is intended to have a mapping, transform, data quality, and if desired, an entity match instruction file to be paired with it. These instruction files are no mandatory and InsuranceLake will create default ones if none are provided. The incoming data files are placed in the Collect layer, a workflow is then triggered to run the mapping, transform, data quality, and entity match processes and the results are stored in the Cleanse layer. Any data quality rules marked as quarantine will kick bad data out to a quarantine layer. Finally a set of spark sql and athena sql files can be run to populate the Consume layer.
 
+---------------------------
+Acronyms
+IL: InsuranceLake
+3C's: Collect, Cleanse, and Consume Data
+DIE: [D]ata files, [I]nstruction files, and generic [E]ngines that use the instruction files to process the data files
+
+---------------------------
 Architectural Principles
 AWS Services:
-1. S3 - stores the incoming data files as well as the Apache Parquet Files
+1. S3: stores the incoming data files as well as the Apache Parquet Files
 2. Lambda
 3. Step Functions: executes the Collect to Cleanse, the Cleanse to Consume, and the Entity Match Glue Jobs
 4. Glue
@@ -16,11 +19,10 @@ AWS Services:
 7. QuickSight
 8. KMS
 
-The 3 C's
-
-Acronyms
-IL: InsuranceLake
-3C's: Collect, Cleanse, and Consume Data
+A scalable ingestion framework is build on 3 pillars:
+data (the subject);
+metadata (the instructions);
+code (the execution engine).
 
 # Collect Data
 CSV Files
@@ -43,8 +45,8 @@ Athena SQL
 discuss how order and reuse in json file is important
 
 ---------------------------
-#Formatting
----------------------------
+Formatting
+
 - currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
 
 
@@ -60,8 +62,8 @@ discuss how order and reuse in json file is important
   "timestamp":[{"field": "GenerationDate","format": "yyyy-MM-dd HH:mm:ss.SSS+0000"}]
 
 ---------------------------
-#Data Manipulation
----------------------------
+Data Manipulation
+
 - addcolumns : Add two or more columns together in a new column
 
 
@@ -93,8 +95,8 @@ discuss how order and reuse in json file is important
   "merge": [{"field": "insuredstatemerge","source_list": ["insuredstatename", "insuredstatecode"],"default": "Unknown"}]
 
 ---------------------------
-#Data Security
----------------------------
+Data Security
+
 - redact : Redact specified column values using supplied redaction string
   "redact": {"CustomerNo": "****"}
 
@@ -105,8 +107,8 @@ discuss how order and reuse in json file is important
   "tokenize": ["EIN"]
 
 ---------------------------
-#Earned Premium
----------------------------
+Earned Premium
+
 - enddate : Add a number of months to a specified date to get an ending/expiration date
 
 
@@ -131,11 +133,6 @@ Schema Changes
 
 
 
-The following Key Concepts & Objects are important to keep in mind when working with IL:
-
-* Batch File data sources - the most common types of data sources are large delimited text files, Excel files, and fixed length files. Therefore IL was initially built to process them by mapping source to target columns, transform each column, and apply data quality rules. 
-* CDC / Streaming / Document data sources - IL cannot currently process these data sources, but can be enhanced relatively quickly to accept them.
-* 
 * code (the execution engine).Metadata contained in csv and json files holds the information that describes how to process each incoming data file;
     Figure 1 shows an example blueprint of an ingestion framework. In this example validated and, if required, transformed data is ingested in either SQLDB, NoSQL DB (Graph), both or none. The sample framework is able to apply three types of validations;
     snapshot validation (ensure the date of the received file is the latest date);
