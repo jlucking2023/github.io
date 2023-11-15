@@ -1,6 +1,11 @@
 # Overview
 InsuranceLake was built to process batch files by mapping source to target columns, transforming each column, and applying data quality rules. The most common type of batch file data sources are large delimited text files, Excel files, and fixed width files. InsuranceLake can be enhanced to accept change data capture, streaming, and document data sources. It is based on the Olympic Data Lake Pattern (bronze-silver-gold) which we call Collect, Cleanse, and Consume your data. Each incoming data source (e.g. a specific csv file with commercial auto policies from broker abc) is intended to have a mapping, transform, data quality, and if desired, an entity match instruction file to be paired with it. These instruction files are no mandatory and InsuranceLake will create default ones if none are provided. The incoming data files are placed in the Collect layer, a workflow is then triggered to run the mapping, transform, data quality, and entity match processes and the results are stored in the Cleanse layer. Any data quality rules marked as quarantine will kick bad data out to a quarantine layer. Finally a set of spark sql and athena sql files can be run to populate the Consume layer.
 
+The fun begins when you start to use and analyze your data. For starters check this out:
+[General Insurance Dashboard]()
+[Life Insurance Dashboard]()
+[QuickSight DemoCentral try out the dashboards and click the icon on the left with the pencil to go into developer view](https://democentral.learnquicksight.online/#)
+
 ---------------------------
 YouTube Videos
 - [8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
@@ -88,10 +93,23 @@ Formatting
 Data Manipulation
 
 - addcolumns : Add two or more columns together in a new column
-
+  "addcolumns": [
+        {
+        "field": "TotalWrittenPremium","source_columns": ["WrittenPremiumAmount"]}]
 
 - columnfromcolumn : Add column to DataFrame based on regexp pattern on another column
-
+  "columnfromcolumn": [
+        {
+        "field": "username",
+        "source": "emailaddress",
+        "pattern": "(\\S+)@\\S+"
+        },
+        {
+        "field": "policyyear",
+        "source": "policyeffectivedate",
+        "pattern": "(\\d\\d\\d\\d)/\\d\\d/\\d\\d"
+        }
+        ]
 
 - combinecolumns : Add column to DataFrame using format string and source columns
 
