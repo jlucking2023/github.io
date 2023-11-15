@@ -2,6 +2,22 @@
 InsuranceLake was built to process batch files by mapping source to target columns, transforming each column, and applying data quality rules. The most common type of batch file data sources are large delimited text files, Excel files, and fixed width files. InsuranceLake can be enhanced to accept change data capture, streaming, and document data sources. It is based on the Olympic Data Lake Pattern (bronze-silver-gold) which we call Collect, Cleanse, and Consume your data. Each incoming data source (e.g. a specific csv file with commercial auto policies from broker abc) is intended to have a mapping, transform, data quality, and if desired, an entity match instruction file to be paired with it. These instruction files are no mandatory and InsuranceLake will create default ones if none are provided. The incoming data files are placed in the Collect layer, a workflow is then triggered to run the mapping, transform, data quality, and entity match processes and the results are stored in the Cleanse layer. Any data quality rules marked as quarantine will kick bad data out to a quarantine layer. Finally a set of spark sql and athena sql files can be run to populate the Consume layer.
 
 ---------------------------
+YouTube Videos
+[8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
+[]()
+[]()
+[]()
+[Data Quality](https://youtu.be/dUhzjX0eabM)
+[Data Lineage](https://youtu.be/E8pjUZK62BI)
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+---------------------------
 Acronyms
 IL: InsuranceLake
 3C's: Collect, Cleanse, and Consume Data
