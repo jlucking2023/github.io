@@ -3,7 +3,6 @@ InsuranceLake was built to process batch files by mapping source to target colum
 
 ---------------------------
 YouTube Videos
-
 - [8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
 - [Part 1 - CodePipeline, Verisk Data, Build a Transform & Unit Test with Code Whisperer](https://youtu.be/2c4hopaboVs)
 - [Part 2 - Run Collect to Cleanse](https://youtu.be/l2r2lBW2zXw)
@@ -19,6 +18,9 @@ DIE: [D]ata files, [I]nstruction files, and generic [E]ngines that use the instr
 
 ---------------------------
 Architectural Principles
+A scalable ingestion framework is build on 3 pillars: data (the subject); metadata (the instructions); and code (the engine).
+
+
 AWS Services:
 1. S3: stores the incoming data files as well as the Apache Parquet Files
 2. Lambda
@@ -29,23 +31,20 @@ AWS Services:
 7. QuickSight
 8. KMS
 
-A scalable ingestion framework is build on 3 pillars:
-data (the subject);
-metadata (the instructions);
-code (the execution engine).
+
 
 # Collect Data
 
 ---------------------------
-**CSV Files
+CSV Files
 
 
 ---------------------------
-**Fixed Width Files
+Fixed Width Files
 
 
 ---------------------------
-**Excel Files
+Excel Files
 
 
 # Cleanse Data
