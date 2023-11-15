@@ -1,13 +1,36 @@
 
-# Table of Contents
+# InsuranceLake Documentation
 
-# Heading 1
+# Overview
+blah
 
-## Heading 1.1
+## Architectural Principles
+blah
 
-## Heading 1.2
+## The 3 C's
+blah
 
-# Heading 2
+## Acronyms
+IL: InsuranceLake
+3C's: Collect, Cleanse, and Consume Data
+
+# Collect Data
+
+## Mapping
+
+## Transforms
+
+## Data Quality Rules
+
+# Cleanse Data
+
+# Consume Data
+
+# Monitor Data Quality
+
+# MonitorData Lineage
+
+# CSV, Fixed Width, Excel Files
 
 [Transforms](#Transforms)
 IL - InsuranceLake
