@@ -1,6 +1,3 @@
-
-# InsuranceLake Documentation
-
 # Overview
 
 Architectural Principles
