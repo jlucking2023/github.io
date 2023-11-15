@@ -2,35 +2,45 @@
 # InsuranceLake Documentation
 
 # Overview
-blah
 
 ## Architectural Principles
-blah
 
 ## The 3 C's
-blah
 
 ## Acronyms
 IL: InsuranceLake
 3C's: Collect, Cleanse, and Consume Data
 
 # Collect Data
-
-## Mapping
-
-## Transforms
-
-## Data Quality Rules
+## CSV Files
+## Fixed W3idth Files
+## Excel Files
 
 # Cleanse Data
+## Mapping
+## Transforms
+## Data Quality Rules
 
 # Consume Data
+## Spark SQL
+## Athena SQL
 
 # Monitor Data Quality
-
 # MonitorData Lineage
 
-# CSV, Fixed Width, Excel Files
+# Using Transforms
+discuss how order and reuse in json file is important
+## Transform1
+## Transform2
+## etc...
+
+# Operation
+## Partitions
+## Reload Data
+## Schema Changes
+
+# DevOps
+
 
 [Transforms](#Transforms)
 IL - InsuranceLake
