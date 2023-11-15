@@ -43,19 +43,28 @@ Athena SQL
 discuss how order and reuse in json file is important
 
 # Data Manipulation
+- "flipsign": [{"field": "Balance"},{"field": "NewAccountBalance","source": "AccountBalance"}]
+- "literal": {"source": "syntheticdata"}
 - Lookup
 - MultiValueLookup
 - AddColumns
-- MergeColumns
+- "merge": [{"field": "insuredstatemerge","source_list": ["insuredstatename", "insuredstatecode"],"default": "Unknown"}]
 
 # Data Security
-- Redact
-- Hash
-- Tokenize
+- "redact": {"CustomerNo": "****"}
+- "hash": ["InsuredContactCellPhone","InsuredContactEmail"]
+- "tokenize": ["EIN"]
 
 # Formatting
 - Date
-- Decimal
+- "decimal": [{"field": "ExpiringPremiumAmount","format": "10,2"},{"field": "WrittenPremiumAmount","format": "10,2"},{"field": "EarnedPremium","format": "10,2"}]
+- "implieddecimal": [{"field": "indemnity_paid_current_period","format": "16,2"}]
+- "timestamp":[{"field": "GenerationDate","format": "yyyy-MM-dd HH:mm:ss.SSS+0000"}]
+
+#Earned Premium
+- "expandpolicymonths": {"uniqueid": "generated_policy_number","policy_month_start_field": "StartDate","policy_month_end_field": "EndDate","policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate"}
+- "policymonths": [{"field": "CalcNumMonths","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date":"ExpirationDate","normalized": true}]
+- "earnedpremium": [{"field": "CalcEarnedPremium","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date": "ExpirationDate","period_start_date": "StartDate","period_end_date": "EndDate","byday": true}]
 
 # Entity Match
 
