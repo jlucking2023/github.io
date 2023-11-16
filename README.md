@@ -254,7 +254,7 @@ The order that you enter the transforms into the json file is very important . E
 ```
 Example of a script that populates a Dynamodb table:
 ```
-
+./load_dynamodb_multilookup_table.py dev-insurancelake-etl-multi-lookup lookups.csv PolicyData-LOBCoverage originalprogram originalcoverage
 ```
 
 - multivaluelookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
@@ -266,11 +266,9 @@ Use the included loading script in the resources directory to import the CSV dat
 
 Usage: load_dynamodb_multilookup_table.py [-h] table_name data_file lookup_group lookup_columns [lookup_columns ...]
 The following arguments are required: table_name, data_file, lookup_group, lookup_columns
-
-* table_name indicates the name of the DynamoDB table deployed by the InsuranceLake CDK stack for multi-lookups, in the form <environment>-<resource prefix>-etl-multi-lookup. All multilookup lookup datasets are stored in the same table and grouped by lookup_group.
-* lookup_group can be any name that is meaninginful to the user and will be specified in the transform spec.
-* lookup_columns are listed as parameters last, separated by spaces. At least one lookup column is required.
-
+- table_name indicates the name of the DynamoDB table deployed by the InsuranceLake CDK stack for multi-lookups, in the form <environment>-<resource prefix>-etl-multi-lookup. All multilookup lookup datasets are stored in the same table and grouped by lookup_group.
+-  lookup_group can be any name that is meaninginful to the user and will be specified in the transform spec.
+- lookup_columns are listed as parameters last, separated by spaces. At least one lookup column is required.
 
 Use the AWS Console for the DynamoDB service to confirm that the data is loaded correctly. Note that the lookup columns will be concatenated with a hyphen (-) separator and stored as a single string in the sort key. All return columns will be stored as separate attributes. This is important to understand when editing the data in the future.
 
