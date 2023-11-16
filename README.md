@@ -60,20 +60,28 @@ Excel Files
 
 # Cleanse Data
 ---------------------------
-**Mapping
+Mapping
+
 ---------------------------
-**Transforms
+Transforms
+
 ---------------------------
-**Data Quality Rules
+Data Quality Rules
+
 
 # Consume Data
 ---------------------------
-**Spark SQL
+Spark SQL
+
 ---------------------------
-**Athena SQL
+Athena SQL
+
 
 # Monitor Data Quality
+
+
 # MonitorData Lineage
+
 
 # Using Transforms
 ---------------------------
@@ -248,8 +256,8 @@ Example of a script that populates a Dynamodb table:
 
 ```
 - multilookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
-
-
+```
+```
 - merge : Merge columns using coalesce 
 ```
   "merge": [
@@ -286,7 +294,7 @@ Data Security
 ```
 ---------------------------
 Earned Premium
-
+```
 - enddate : Add a number of months to a specified date to get an ending/expiration date
   "enddate": [
         {
@@ -295,8 +303,9 @@ Earned Premium
         "num_months": "Term"
         }
         ]
-
+```
 - expandpolicymonths : Expand dataset to one row for each month the policy is active with a calculated earned premium
+```
   "expandpolicymonths": {
         "uniqueid": "generated_policy_number",
         "policy_month_start_field": "StartDate",
@@ -304,7 +313,7 @@ Earned Premium
         "policy_effective_date": "EffectiveDate",
         "policy_expiration_date": "ExpirationDate"
         }
-
+```
 - policymonths : Calculate number of months between policy start/end dates
 ```
   "policymonths": [
@@ -320,6 +329,7 @@ Earned Premium
         ]
 ```
 - earnedpremium : Calculate monthly earned premium
+```
   "earnedpremium": [
         {
         "field": "CalcEarnedPremium",
@@ -333,7 +343,7 @@ Earned Premium
         "byday": true
         }
         ]
-
+```
 # Entity Match
 
 
@@ -344,43 +354,3 @@ Schema Changes
 
 # DevOps
 
-
-
-* code (the execution engine).Metadata contained in csv and json files holds the information that describes how to process each incoming data file;
-    Figure 1 shows an example blueprint of an ingestion framework. In this example validated and, if required, transformed data is ingested in either SQLDB, NoSQL DB (Graph), both or none. The sample framework is able to apply three types of validations;
-    snapshot validation (ensure the date of the received file is the latest date);
-    rowcount anomaly (sanity check on the amount of records in the file);
-    datatype validation (ensure the datatype of a column is the expected datatype).
-    In reality you could have many more validation or quality checks that you want to apply. However, it’s not a given that all checks apply to all sources. Some sources might be eligible for more (or less) validation checks, depending on file-specific features like sensitivity, governance etc.
-* Mapping CSV file -
-* Transform JSON file -
-* Data Quality JSON file -
-* Athena SQL Files - 
-* Spark SQL Files - 
-
-
-
-# Installation
-Install the basics in 30 minutes
-To set the region that InsuranceLake is installed in see the lib/configuration.py file.
-https://gitlab.aws.dev/fsi-sat/aws-cdk-insurancelake-etl/-/blob/main/README.md
-https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md
-
-can this be done both stand alone AND after the QuickStart is done?
-install the basics + DevOps tools
-Setup a new repository and deploy using CI/CD
-
-Pull from an existing repository and deploy using CI/CD (will be the de-facto install once published in Github)
-
-Install with 3 environments
-
-Make a change and deploy automatically with self-mutating CodePipeline
-
-InsuranceLake can be deployed with no VPC simply by removing the subnet definition in configuration.py. The VPC is only used if the customer needs it.
-
-The public subnet is completely optional as well. InsuranceLake does not require any VPC, so it also does not require public subnets. Creating a VPC with half public subnets and half private is the default behavior. You can modify this by passing the subnet_configuration parameter to the VPC creation in lib/vpc_stack.py.
-
-If the VPC is enabled in InsuranceLake, Glue is really the only service that will use it, and specifically, for Glue connections. If you try this out, you’ll see that the Glue connections specifically select the private subnet from the InsuranceLake-created VPC, through the vpc.subnets method.
-
-1. Add Permission boundaries to all the roles that CDK creates example add Permission boundary name CloudCoreL3PermissionBoundary to all the roles 
-2. Add the mandatory tags to all resources without which SCP will deny any resource creation.
