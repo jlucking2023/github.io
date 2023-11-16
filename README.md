@@ -1,4 +1,4 @@
-# Overview
+`# Overview
 InsuranceLake was built to process batch files by mapping source to target columns, transforming each column, and applying data quality rules. The most common type of batch file data sources are large delimited text files, Excel files, and fixed width files. InsuranceLake can be enhanced to accept change data capture, streaming, and document data sources. It is based on the Olympic Data Lake Pattern (bronze-silver-gold) which we call Collect, Cleanse, and Consume your data. Each incoming data source (e.g. a specific csv file with commercial auto policies from broker abc) is intended to have a mapping, transform, data quality, and if desired, an entity match instruction file to be paired with it. These instruction files are no mandatory and InsuranceLake will create default ones if none are provided. The incoming data files are placed in the Collect layer, a workflow is then triggered to run the mapping, transform, data quality, and entity match processes and the results are stored in the Cleanse layer. Any data quality rules marked as quarantine will kick bad data out to a quarantine layer. Finally a set of spark sql and athena sql files can be run to populate the Consume layer.
 
 The fun begins when you start to use and analyze your data. For starters check this out:
@@ -76,7 +76,7 @@ discuss how order and reuse in json file is important
 Formatting
 
 - currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
-'''
+```
   "currency": [
         {
           "field": "SmallDollars",
@@ -87,7 +87,7 @@ Formatting
           "euro": true
         }
         ]
-'''
+```
 
 - date : Convert specified date fields to ISO format based on known input format
 ```
@@ -107,6 +107,7 @@ Formatting
         ]
 ```
 - decimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) typ "decimal"
+```
   "decimal": [
         {
           "field": "ExpiringPremiumAmount",
@@ -121,7 +122,7 @@ Formatting
           "format": "10,2"
         }
         ]
-
+```
 - implieddecimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
   "implieddecimal": [
         {
