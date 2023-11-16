@@ -256,9 +256,50 @@ Example of a script that populates a Dynamodb table:
 ```
 
 ```
-- multilookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
+
+- multivaluelookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
+To setup a multilookup transform, begin by preparing the lookup data. The data should be saved as CSV and include all the match columns and return value columns. It is ok to have some columns that are not used, because the transform specification allows the user to select the specific return columns.
+
+Use the included loading script in the resources directory to import the CSV data into etl-multi-lookup DynamoDB table:
+
+./load_dynamodb_multilookup_table.py dev-insurancelake-etl-multi-lookup lookups.csv PolicyData-LOBCoverage originalprogram originalcoverage
+
+Usage: load_dynamodb_multilookup_table.py [-h] table_name data_file lookup_group lookup_columns [lookup_columns ...]
+The following arguments are required: table_name, data_file, lookup_group, lookup_columns
+
+* table_name indicates the name of the DynamoDB table deployed by the InsuranceLake CDK stack for multi-lookups, in the form <environment>-<resource prefix>-etl-multi-lookup. All multilookup lookup datasets are stored in the same table and grouped by lookup_group.
+* lookup_group can be any name that is meaninginful to the user and will be specified in the transform spec.
+* lookup_columns are listed as parameters last, separated by spaces. At least one lookup column is required.
+
+
+Use the AWS Console for the DynamoDB service to confirm that the data is loaded correctly. Note that the lookup columns will be concatenated with a hyphen (-) separator and stored as a single string in the sort key. All return columns will be stored as separate attributes. This is important to understand when editing the data in the future.
+
+Now insert the multilookup specification into your dataset’s transformation spec file (in the transform_spec section). An example follows:
+
+
 ```
+  "multivaluelookup": [
+        {
+        "lookup_group": "LOBCoverage",
+        "match_columns": [
+          "program",
+          "coverage"
+        ],
+        "return_attributes": [
+          "coveragenormalized",
+          "lob"
+        ],
+        "nomatch": "N/A"
+        }
+        ]
 ```
+
+- The lookup_group string should match the lookup_group string you used to load the data in DynamoDB.
+- match_columns indicates the columns in your incoming data set that must have matching values in the lookup data. Note that the column values only refer to the incoming dataset. The column names in your lookup data (in DynamoDB) do not matter, because all the lookup column values are stored in a concatenated string in the lookup_item sort key.
+- return_attributes specifies the attribute names in the DynamoDB lookup table to add to the incoming dataset.
+
+Important Note: if a column already exists, a duplicate column will be created, which will raise an error when saving to Parquet format. Take care to map your incoming dataset correctly so that it has unique column names after performing the multilookup transform. For example. suppose your incoming data has a lineofbusiness column, but it is composed of bespoke values that you want to normalize. Best practice would be to map lineofbusiness to the name originallineofbusiness so the incoming data is preserved, and use the multilookup to return a new (normalized) lineofbusiness attribute value.
+
 - merge : Merge columns using coalesce 
 ```
   "merge": [
