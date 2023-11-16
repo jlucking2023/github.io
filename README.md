@@ -59,22 +59,23 @@ Excel Files
 
 
 # Cleanse Data
----------------------------
-Mapping
 
 ---------------------------
-Transforms
+## Mapping
 
 ---------------------------
-Data Quality Rules
+## Transforms
+
+---------------------------
+## Data Quality Rules
 
 
 # Consume Data
 ---------------------------
-Spark SQL
+## Spark SQL
 
 ---------------------------
-Athena SQL
+## Athena SQL
 
 
 # Monitor Data Quality
@@ -294,8 +295,9 @@ Example of a script that populates a Dynamodb table:
 ```
 ---------------------------
 ## Earned Premium
-```
+
 - enddate : Add a number of months to a specified date to get an ending/expiration date
+```
   "enddate": [
         {
         "field": "CalcExpirationDate",
