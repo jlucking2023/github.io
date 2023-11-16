@@ -1,33 +1,3 @@
-Explain where they go in the Transform JSON file and the importance of the order that they are inserted into it.
-22 transforms taken from here
-
-addcolumns
-
-"addcolumns": [
-            {
-                "field": "TotalWrittenPremium",
-                "source_columns": [ "WrittenPremiumAmount" ]
-            }
-        ]
-
-
-
-columnfromcolumn
-
-"columnfromcolumn": [
-            {
-                "field": "username",
-                "source": "emailaddress",
-                "pattern": "(\\S+)@\\S+"
-
-            },
-            {
-                "field": "policyyear",
-                "source": "policyeffectivedate",
-                "pattern": "(\\d\\d\\d\\d)/\\d\\d/\\d\\d"
-            }
-        ]
-
 combinecolumns
 
 "combinecolumns": [
