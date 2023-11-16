@@ -76,6 +76,7 @@ discuss how order and reuse in json file is important
 Formatting
 
 - currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
+'''
   "currency": [
         {
           "field": "SmallDollars",
@@ -86,8 +87,10 @@ Formatting
           "euro": true
         }
         ]
+'''
 
 - date : Convert specified date fields to ISO format based on known input format
+```
   "date": [
         {
           "field": "StartDate",
@@ -102,7 +105,7 @@ Formatting
           "format": "yyyyMMdd"
         }
         ]
-
+```
 - decimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) typ "decimal"
   "decimal": [
         {
