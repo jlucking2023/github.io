@@ -2,9 +2,11 @@
 InsuranceLake was built to process batch files by mapping source to target columns, transforming each column, and applying data quality rules. The most common type of batch file data sources are large delimited text files, Excel files, and fixed width files. InsuranceLake can be enhanced to accept change data capture, streaming, and document data sources. It is based on the Olympic Data Lake Pattern (bronze-silver-gold) which we call Collect, Cleanse, and Consume your data. Each incoming data source (e.g. a specific csv file with commercial auto policies from broker abc) is intended to have a mapping, transform, data quality, and if desired, an entity match instruction file to be paired with it. These instruction files are no mandatory and InsuranceLake will create default ones if none are provided. The incoming data files are placed in the Collect layer, a workflow is then triggered to run the mapping, transform, data quality, and entity match processes and the results are stored in the Cleanse layer. Any data quality rules marked as quarantine will kick bad data out to a quarantine layer. Finally a set of spark sql and athena sql files can be run to populate the Consume layer.
 
 The fun begins when you start to use and analyze your data. For starters check this out:
-[General Insurance Dashboard]()
-[Life Insurance Dashboard]()
+[Gaining insights into Combined Ratio and Claims](https://youtu.be/qEbxU9Q6uVc)
+[Measuring agents book of business](https://youtu.be/Qx-iKbyYNDI)
 [QuickSight DemoCentral try out the dashboards and click the icon on the left with the pencil to go into developer view](https://democentral.learnquicksight.online/#)
+[General Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-General-Insurance)
+[Life Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-Life-Insurance)
 
 ---------------------------
 YouTube Videos
@@ -70,9 +72,9 @@ Excel Files
 # MonitorData Lineage
 
 # Using Transforms
-discuss how order and reuse in json file is important
-
 ---------------------------
+The order that you enter the transforms into the json file is very important . Each transform is executed on the incoming dataset starting from the beginning of the transform_spec section of the file.
+
 Formatting
 
 - currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
@@ -124,28 +126,37 @@ Formatting
         ]
 ```
 - implieddecimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
+```
   "implieddecimal": [
         {
           "field": "indemnity_paid_current_period",
           "format": "16,2"
         }
         ]
-
+```
 - timestamp	Convert specified date/time fields to ISO format based on known input format
-  "timestamp":[{"field": "GenerationDate","format": "yyyy-MM-dd HH:mm:ss.SSS+0000"}]
-
+```
+"timestamp": [
+        {
+        "field": "GenerationDate",
+        "format": "yyyy-MM-dd HH:mm:ss.SSS+0000"
+        }
+        ]
+```
 ---------------------------
 Data Manipulation
 
 - addcolumns : Add two or more columns together in a new column
+```
   "addcolumns": [
         {
           "field": "TotalWrittenPremium",
           "source_columns": [ "WrittenPremiumAmount" ]
         }
         ]
-
+```
 - columnfromcolumn : Add column to DataFrame based on regexp pattern on another column
+```
   "columnfromcolumn": [
         {
           "field": "username",
@@ -158,8 +169,9 @@ Data Manipulation
           "pattern": "(\\d\\d\\d\\d)/\\d\\d/\\d\\d"
         }
         ]
-
+```
 - combinecolumns : Add column to DataFrame using format string and source columns
+```
   "combinecolumns": [
         {
           "field": "RowKey",
@@ -167,8 +179,9 @@ Data Manipulation
           "source_columns": [ "LOBCode", "PolicyNumber", "StartDate" ]
         }
         ]
-
+```
 - filename : Add column to DataFrame based on regexp pattern on the filename argument to the Glue job
+```
   "filename": [
         {
           "field": "valuationdate",
@@ -181,8 +194,9 @@ Data Manipulation
           "required": true
         }
         ]
-
+```
 - filterrows : Filter out rows based on standard SQL WHERE statement
+```
   "filterrows": [
         {
           "condition": "claim_number is not null or file_number is not null"
@@ -191,8 +205,9 @@ Data Manipulation
           "condition": "`startdate` >= cast('1970-01-01' as date)"
         }
         ]
-        
+```        
 - flipsign : Flip the sign of a numeric column in a Spark DataFrame, optionally in a new column 
+```
   "flipsign": [
         {
           "field": "Balance"
@@ -202,34 +217,69 @@ Data Manipulation
           "source": "AccountBalance"
         }
         ]
-
+```
 - literal : Add column to DataFrame with static/literal value supplied in specification 
-  "literal": {"source": "syntheticdata"}
+```
+  "literal": {
+          "source": "syntheticdata"
+        }
+```
+- lookup : Replace specified column values with values looked up from an dynamodb table
+```
+  "lookup": [
+        {
+        "field": "smokingclass",
+        "lookup": "smokingclass"
+        },
+        {
+        "field": "issuestatename",
+        "source": "issuestate",
+        "lookup": "StateCd",
+        "nomatch": "N/A"
+        }
+        ]
+```
+Example of a script that populates a Dynamodb table:
+```
 
-- lookup : Replace specified column values with values looked up from an external table
-  
-
+```
 - multilookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
 
 
 - merge : Merge columns using coalesce 
-  "merge": [{"field": "insuredstatemerge","source_list": ["insuredstatename", "insuredstatecode"],"default": "Unknown"}]
-
+```
+  "merge": [
+        {
+          "field": "insuredstatemerge",
+          "source_list": [
+            "insuredstatename", "insuredstatecode"
+        ],
+          "default": "Unknown"
+        }
+        ]
+```
 ---------------------------
 Data Security
 
 - redact : Redact specified column values using supplied redaction string
-  "redact": {"CustomerNo": "****"}
-
+```
+  "redact": {
+        "CustomerNo": "****"
+        }
+```
 - hash : Hash specified column values using SHA256 and Spark UDF
+```
   "hash": [
           "InsuredContactCellPhone",
           "InsuredContactEmail"
         ]
-  
+```  
 - tokenize : Replace specified column values with hash and store original value in separate table
-  "tokenize": ["EIN"]
-
+```
+  "tokenize": [
+        "EIN"
+        ]
+```
 ---------------------------
 Earned Premium
 
@@ -252,8 +302,19 @@ Earned Premium
         }
 
 - policymonths : Calculate number of months between policy start/end dates
-  "policymonths": [{"field": "CalcNumMonths","written_premium_list": ["WrittenPremiumAmount"],"policy_effective_date": "EffectiveDate","policy_expiration_date":"ExpirationDate","normalized": true}]
-
+```
+  "policymonths": [
+        {
+          "field": "CalcNumMonths",
+          "written_premium_list": [
+            "WrittenPremiumAmount"
+        ],
+          "policy_effective_date": "EffectiveDate",
+          "policy_expiration_date": "ExpirationDate",
+          "normalized": true
+        }
+        ]
+```
 - earnedpremium : Calculate monthly earned premium
   "earnedpremium": [
         {
