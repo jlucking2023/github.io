@@ -84,10 +84,10 @@ Athena SQL
 
 
 # Using Transforms
----------------------------
 The order that you enter the transforms into the json file is very important . Each transform is executed on the incoming dataset starting from the beginning of the transform_spec section of the file.
 
-Formatting
+---------------------------
+## Formatting
 
 - currency : Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
 ```
@@ -156,7 +156,7 @@ Formatting
         ]
 ```
 ---------------------------
-Data Manipulation
+## Data Manipulation
 
 - addcolumns : Add two or more columns together in a new column
 ```
@@ -271,7 +271,7 @@ Example of a script that populates a Dynamodb table:
         ]
 ```
 ---------------------------
-Data Security
+## Data Security
 
 - redact : Redact specified column values using supplied redaction string
 ```
@@ -293,7 +293,7 @@ Data Security
         ]
 ```
 ---------------------------
-Earned Premium
+## Earned Premium
 ```
 - enddate : Add a number of months to a specified date to get an ending/expiration date
   "enddate": [
