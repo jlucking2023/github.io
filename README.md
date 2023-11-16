@@ -19,14 +19,20 @@ YouTube Videos
 
 ---------------------------
 Acronyms
-IL: InsuranceLake
-3C's: Collect, Cleanse, and Consume Data
-DIE: [D]ata files, [I]nstruction files, and generic [E]ngines that use the instruction files to process the data files
+- IL: InsuranceLake
+- 3C's: Collect, Cleanse, and Consume Data
+- DIE: [D]ata files, [I]nstruction files, and generic [E]ngines that use the instruction files to process the data files
 
 ---------------------------
 Architectural Principles
 A scalable ingestion framework is build on 3 pillars: data (the subject); metadata (the instructions); and code (the engine).
 
+FLIPS:
+- Foundation: Automated AWS account provisioning and monitoring
+- Less is More: keep it Simple, Code is BOTH an Asset and a Liability
+- Iterative Improvements: Build in weeks not months with 2 Pizza Teams that use DevSecOps
+- Patterns: 3C's and DIE
+- Serverless + Automation: Avoid the undifferentiated heavy lifting, everything as code with the AWS CDK
 
 AWS Services:
 1. S3: stores the incoming data files as well as the Apache Parquet Files
@@ -37,8 +43,6 @@ AWS Services:
 6. Athena
 7. QuickSight
 8. KMS
-
-
 
 # Collect Data
 
