@@ -83,22 +83,107 @@ Add the following code block to your transform JSON file. This should be at the 
   }
 }
 ```
-Note on Sedgewick e02 fixed width data files: to handle zero-padded data fields the <> transform was created to convert them into null values
+Note on Sedgewick e02 fixed width data files: to handle zero-padded data fields the columnreplace transform was created to convert them into null values
 
+Sedgwick e02 Claim Interface File Option 1: manually split files
+Fixed Length files need a mapping file with these 3 columns: SourceName,DestName,Width.
+Width is the length of the field.
+
+How to handle fixed length files with multiple record types where each type has a different layout?
+See this file e02-Claims.csv for an example of a mapping file for record type ''.
+```
+SourceName,DestName,Width
+record_type,record_type,3
+client_id,client_id,4
+client_account,client_account,8
+client_location,client_location,6
+claim_number,claim_number,18
+etc...
+```
+
+See this file e02-Claims.json for an example of a transform spec file.
+note: date and implieddecimal fields removed for brevity.
+```
+{
+	"input_spec": {
+
+		"fixed": {}
+	},
+
+	"transform_spec": {
+
+		"combinecolumns": [
+			{
+				"field": "datetime_of_loss",
+				"format": "{} {}",
+				"source_columns": [ "date_of_loss", "time_of_loss" ]
+			}
+		],
+	
+		"date": [
+			{
+				"field": "date_of_loss",
+				"format": "yyyyMMdd"
+			},
+			{
+				"field": "length_of_service",
+				"format": "yyMMdd"
+			}
+		],
+
+		"timestamp": [
+			{
+				"field": "datetime_of_loss",
+				"format": "yyyyMMdd HHmm"
+			}
+		],
+
+		"redact": {
+			"claimant_last_name": "****",
+			"claimant_ssn": "****",
+			"claimant_age": "****",
+			"date_of_birth": "****",
+			"union_id": "****",
+			"driver_name": "****",
+			"driver_age": "****",
+			"claimant_telephone_number": "****"
+		},
+
+		"implieddecimal": [
+			{
+				"field": "avg_weekly_wage",
+				"format": "16,2"
+			},
+			{
+				"field": "net_incurred",
+				"format": "16,2"
+			}
+		]
+	}
+}
+```
+
+Here's how to perform a manual separation of record types:
+```
+grep ^<record type code> e02file > e02file-filtered
+grep ^CLM e02file > e02file-claims
+```
+
+Sedgwick e02 Claim Interface File Option 2: use lambda split file function
 
 ---------------------------
 Excel Files
 Add the following code block to your transform JSON file. This should be at the very top of the file.
 ```
 "input_spec": {
-  "excel": {
-    "sheet_names": [
-      "Sheet1"
-    ],
-    "data_address": "A1",
-    "header": true,
-    "password": ""
-  }
+    "excel": {
+        "sheet_names": [
+            "Sheet1"
+        ],
+        "data_address": "A1",
+        "header": true,
+        "password": ""
+    }
 },
 ```
 
@@ -199,6 +284,7 @@ The order that you enter the transforms into the json file is very important . E
 ```
 
 - implieddecimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
+...handles currency fields with no decimal point and implied decimal values as the last two characters, which is what the Sedgwick file uses.
 ```
   "implieddecimal": [
         {
