@@ -188,6 +188,11 @@ Add the following code block to your transform JSON file. This should be at the 
 ```
 
 
+---------------------------
+Parquet Files
+Parquet file in the Collect bucket support (Parquet files should be uploaded by themselves, i.e. without any partition folder structure)
+
+
 # Cleanse Data
 dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
 
@@ -201,6 +206,18 @@ dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name
 
 ---------------------------
 ## Data Quality Rules
+
+quarantine
+Build and test insurance data quality rules
+
+* warn
+* fail
+
+Data Quality rule descriptions
+Data Quality warning alerts
+
+Note on Transforms & Data Quality
+here might be situation where day and month is reversed and if for some dates the day is <=12 it will still transform them considering them as day while they are actually month. Similarly, as we have seen in the case of wrong formats where we expressed MM as mm it used its interpretation of facts.
 
 
 # Consume Data
@@ -556,8 +573,15 @@ Important Note: if a column already exists, a duplicate column will be created, 
 
 
 # Operation
+---------------------------
 Partitions
-Reload Data
+
+
+
+---------------------------
+Purge and Reload Data
+Replace a previously loaded dataset (same day and different day)
+instructions on how to handle re-loading the same data file (perhaps Feb's Broker A data had an error and you want to reload it)
 
 
 ---------------------------
@@ -573,4 +597,48 @@ Duplicate Column Names
 Spark can handle duplicate column names by appending a number representing the index of the column.
 
 # DevOps
+
+dev-insurancelake-cleanse-to-consume-job
+
+Python library path
+s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
+01. custom_mapping.py,
+02. datalineage.py,
+03. dataquality_check.py,
+04. datatransform_dataprotection.py,
+05. datatransform_lookup.py,
+06. datatransform_premium.py,
+07. datatransform_premiumdemo.py,
+08. glue_catalog_helpers.py
+
+Dependent JARs path
+s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
+01. openlineage-spark-0.29.2.jar,
+02. poi-ooxml-5.2.3.jar,
+03. spark-excel_2.12-3.3.1_0.18.7.jar,
+04. xmlbeans-5.1.1.jar
+
+
+dev-insurancelake-collect-to-cleanse-job
+
+Python library path
+s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
+01. custom_mapping.py,
+02. datalineage.py,
+03. dataquality_check.py,
+04. datatransform_dataprotection.py,
+05. datatransform_lookup.py,
+06. datatransform_premium.py,
+07. datatransform_premiumdemo.py,
+08. datatransform_regex.py,
+09. datatransform_reshape.py,
+10. datatransform_typeconversion.py,
+11. glue_catalog_helpers.py
+
+Dependent JARs path
+s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
+01. openlineage-spark-0.29.2.jar,
+02. poi-ooxml-5.2.3.jar,
+03. spark-excel_2.12-3.3.1_0.18.7.jar,
+04. xmlbeans-5.1.1.jar
 
