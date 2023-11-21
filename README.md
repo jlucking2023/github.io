@@ -39,29 +39,77 @@ AWS Services:
 2. Lambda
 3. Step Functions: executes the Collect to Cleanse, the Cleanse to Consume, and the Entity Match Glue Jobs
 4. Glue
-5. DynamoDB
+5. DynamoDB - used for lookup & multilookup transforms as well as stores logs
 6. Athena
 7. QuickSight
 8. KMS
 
+
+# Installation
+To set the region that InsuranceLake is installed in see the lib/configuration.py file.
+- [30 minute QuickStart](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart) 
+- [60 minute QuickStart with CI/CD](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart-with-cicd)
+
+---------------------------
+Make a change an deploy automatically with self-mutating CodePipeline
+
+---------------------------
+No VPC's needed
+- InsuranceLake can be deployed with no VPC(s) simply by removing the subnet definition in configuration.py.
+- The public subnet is completely optional as well. InsuranceLake does not require any VPC, so it also does not require public subnets. Creating a VPC with half public subnets and half private is the default behavior. You can modify this by passing the subnet_configuration parameter to the VPC creation in lib/vpc_stack.py.
+- If the VPC is enabled in InsuranceLake, Glue is really the only service that will use it, and specifically, for Glue connections. If you try this out, you’ll see that the Glue connections specifically select the private subnet from the InsuranceLake-created VPC, through the vpc.subnets method.
+
+
 # Collect Data
+dev-insurancelake-<account ID>-us-east-2-collect > <database name> > <table name>
 
 ---------------------------
 CSV Files
-
+Add the following code block to your transform JSON file. This should be at the very top of the file.
+```
+```
 
 ---------------------------
 Fixed Width Files
+Add the following code block to your transform JSON file. This should be at the very top of the file.
+```
+{
+  "input_spec": {     
+    "fixed": {
+    
+    }
+  },
+  "transform_spec": {      
+  }
+}
+```
+Note on Sedgewick e02 fixed width data files: to handle zero-padded data fields the <> transform was created to convert them into null values
 
 
 ---------------------------
 Excel Files
+Add the following code block to your transform JSON file. This should be at the very top of the file.
+```
+"input_spec": {
+  "excel": {
+    "sheet_names": [
+      "Sheet1"
+    ],
+    "data_address": "A1",
+    "header": true,
+    "password": ""
+  }
+},
+```
 
 
 # Cleanse Data
+dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
 
 ---------------------------
 ## Mapping
+
+
 
 ---------------------------
 ## Transforms
@@ -71,12 +119,21 @@ Excel Files
 
 
 # Consume Data
+dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
+
 ---------------------------
 ## Spark SQL
+spark_<name>.sql - 1 statement in file is allowed
+
+
+
+
+
+
 
 ---------------------------
 ## Athena SQL
-
+athena_<name>.sql - multiple statements in file is allowed
 
 # Monitor Data Quality
 
@@ -104,6 +161,7 @@ The order that you enter the transforms into the json file is very important . E
         ]
 ```
 
+
 - date : Convert specified date fields to ISO format based on known input format
 ```
   "date": [
@@ -121,6 +179,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - decimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) typ "decimal"
 ```
   "decimal": [
@@ -138,6 +197,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - implieddecimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
 ```
   "implieddecimal": [
@@ -147,6 +207,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - timestamp	Convert specified date/time fields to ISO format based on known input format
 ```
 "timestamp": [
@@ -168,6 +229,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - columnfromcolumn : Add column to DataFrame based on regexp pattern on another column
 ```
   "columnfromcolumn": [
@@ -183,6 +245,11 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
+- columnreplace :
+```
+```
+
 - combinecolumns : Add column to DataFrame using format string and source columns
 ```
   "combinecolumns": [
@@ -193,6 +260,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - filename : Add column to DataFrame based on regexp pattern on the filename argument to the Glue job
 ```
   "filename": [
@@ -208,6 +276,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - filterrows : Filter out rows based on standard SQL WHERE statement
 ```
   "filterrows": [
@@ -219,6 +288,7 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```        
+
 - flipsign : Flip the sign of a numeric column in a Spark DataFrame, optionally in a new column 
 ```
   "flipsign": [
@@ -231,13 +301,17 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
+
 - literal : Add column to DataFrame with static/literal value supplied in specification 
 ```
   "literal": {
           "source": "syntheticdata"
         }
 ```
+
 - lookup : Replace specified column values with values looked up from an dynamodb table
+- Future: use / enhance existing DynamoDB load python code (located here?)
+- Future: add a copy between Dev-Test-Prod in DevSecOps Process
 ```
   "lookup": [
         {
@@ -252,17 +326,18 @@ The order that you enter the transforms into the json file is very important . E
         }
         ]
 ```
-Example of a script that populates a Dynamodb table:
-```
-./load_dynamodb_multilookup_table.py dev-insurancelake-etl-multi-lookup lookups.csv PolicyData-LOBCoverage originalprogram originalcoverage
-```
 
 - multivaluelookup : Add columns looked up from an external table using multiple conditions, returning any number of attributes
 To setup a multilookup transform, begin by preparing the lookup data. The data should be saved as CSV and include all the match columns and return value columns. It is ok to have some columns that are not used, because the transform specification allows the user to select the specific return columns.
+- Future: use / enhance existing DynamoDB load python code
+```
+./load_dynamodb_multilookup_table.py dev-insurancelake-etl-multi-lookup lookups.csv PolicyData-LOBCoverage originalprogram originalcoverage
+```
+- Future: add a copy between Dev-Test-Prod in DevSecOps Process
 
 Use the included loading script in the resources directory to import the CSV data into etl-multi-lookup DynamoDB table:
 
-./load_dynamodb_multilookup_table.py dev-insurancelake-etl-multi-lookup lookups.csv PolicyData-LOBCoverage originalprogram originalcoverage
+
 
 Usage: load_dynamodb_multilookup_table.py [-h] table_name data_file lookup_group lookup_columns [lookup_columns ...]
 The following arguments are required: table_name, data_file, lookup_group, lookup_columns
@@ -319,6 +394,7 @@ Important Note: if a column already exists, a duplicate column will be created, 
         "CustomerNo": "****"
         }
 ```
+
 - hash : Hash specified column values using SHA256 and Spark UDF
 ```
   "hash": [
@@ -326,6 +402,7 @@ Important Note: if a column already exists, a duplicate column will be created, 
           "InsuredContactEmail"
         ]
 ```  
+
 - tokenize : Replace specified column values with hash and store original value in separate table
 ```
   "tokenize": [
@@ -345,6 +422,7 @@ Important Note: if a column already exists, a duplicate column will be created, 
         }
         ]
 ```
+
 - expandpolicymonths : Expand dataset to one row for each month the policy is active with a calculated earned premium
 ```
   "expandpolicymonths": {
@@ -355,6 +433,7 @@ Important Note: if a column already exists, a duplicate column will be created, 
         "policy_expiration_date": "ExpirationDate"
         }
 ```
+
 - policymonths : Calculate number of months between policy start/end dates
 ```
   "policymonths": [
@@ -369,6 +448,7 @@ Important Note: if a column already exists, a duplicate column will be created, 
         }
         ]
 ```
+
 - earnedpremium : Calculate monthly earned premium
 ```
   "earnedpremium": [
@@ -385,13 +465,26 @@ Important Note: if a column already exists, a duplicate column will be created, 
         }
         ]
 ```
+
 # Entity Match
 
 
 # Operation
 Partitions
 Reload Data
+
+
+---------------------------
 Schema Changes
+IL allows for three types of methods for handling schema changes:
+Permissive - <describe briefly here>
+Strict - <describe briefly here>
+Reorder - <describe briefly here>
+
+
+---------------------------
+Duplicate Column Names
+Spark can handle duplicate column names by appending a number representing the index of the column.
 
 # DevOps
 
