@@ -198,7 +198,13 @@ dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name
 
 ---------------------------
 ## Mapping
-
+Commas are not allowed in any column as they are used to indicate the next column.
+- SourceName : required, must be the first column and match the column names in the 1 row of the data file, if there are no column names then col_1, col_2, col_(n+1) should be used.
+- DestName : required, must be the 2nd column and contain all lower case characters.
+- Description : optional column that can contain any character.
+- Width : required for Fixed Width Files, must be the third column and contain only a positve integer.
+- Threshold : ?
+- Score : ?
 
 
 ---------------------------
@@ -598,7 +604,18 @@ Spark can handle duplicate column names by appending a number representing the i
 
 # DevOps
 
+---------------------------
 dev-insurancelake-cleanse-to-consume-job
+
+
+
+
+
+
+In OpenSource Install but not below
+datatransform_regex.py,
+datatransform_typeconversion.py,
+
 
 Python library path
 s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
@@ -608,17 +625,18 @@ s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
 04. datatransform_dataprotection.py,
 05. datatransform_lookup.py,
 06. datatransform_premium.py,
-07. datatransform_premiumdemo.py,
++07. datatransform_premiumdemo.py,
 08. glue_catalog_helpers.py
 
 Dependent JARs path
 s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. openlineage-spark-0.29.2.jar,
-02. poi-ooxml-5.2.3.jar,
-03. spark-excel_2.12-3.3.1_0.18.7.jar,
-04. xmlbeans-5.1.1.jar
++01. openlineage-spark-0.29.2.jar,
++02. poi-ooxml-5.2.3.jar,
++03. spark-excel_2.12-3.3.1_0.18.7.jar,
++04. xmlbeans-5.1.1.jar
 
 
+---------------------------
 dev-insurancelake-collect-to-cleanse-job
 
 Python library path
@@ -629,16 +647,16 @@ s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
 04. datatransform_dataprotection.py,
 05. datatransform_lookup.py,
 06. datatransform_premium.py,
-07. datatransform_premiumdemo.py,
++07. datatransform_premiumdemo.py,
 08. datatransform_regex.py,
-09. datatransform_reshape.py,
++09. datatransform_reshape.py,
 10. datatransform_typeconversion.py,
 11. glue_catalog_helpers.py
 
 Dependent JARs path
-s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. openlineage-spark-0.29.2.jar,
-02. poi-ooxml-5.2.3.jar,
-03. spark-excel_2.12-3.3.1_0.18.7.jar,
-04. xmlbeans-5.1.1.jar
++s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
++01. openlineage-spark-0.29.2.jar,
++02. poi-ooxml-5.2.3.jar,
++03. spark-excel_2.12-3.3.1_0.18.7.jar,
++04. xmlbeans-5.1.1.jar
 
