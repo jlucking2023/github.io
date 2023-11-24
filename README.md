@@ -614,16 +614,6 @@ Spark can handle duplicate column names by appending a number representing the i
 ---------------------------
 dev-insurancelake-cleanse-to-consume-job
 
-
-
-
-
-
-In OpenSource Install but not below
-datatransform_regex.py,
-datatransform_typeconversion.py,
-
-
 Python library path
 s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
 01. custom_mapping.py,
@@ -633,7 +623,9 @@ s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
 05. datatransform_lookup.py,
 06. datatransform_premium.py,
 07. datatransform_premiumdemo.py,
-08. glue_catalog_helpers.py
+08. datatransform_regex.py,
+09. datatransform_typeconversion.py,
+10. glue_catalog_helpers.py
 
 Dependent JARs path
 s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
