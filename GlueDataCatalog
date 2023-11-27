@@ -1,0 +1,23 @@
+# Glue Data Catalog
+
+Data Types
+- array
+- bigint
+- binary
+- boolean
+- char
+- date
+- decimal
+- double
+- float
+- int
+- interval
+- map
+- set
+- smallint
+- string
+- struct
+- timestamp
+- tinyint
+- union
+- varchar
