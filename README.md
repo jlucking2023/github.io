@@ -8,20 +8,14 @@ The fun begins when you start to use and analyze your data. For starters check t
 - [General Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-General-Insurance)
 - [Life Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-Life-Insurance)
 
+
 ---------------------------
 YouTube Videos
 - [8 Minute Overview](https://youtu.be/UEVrSGrH3JA)
-- [Part 1 - CodePipeline, Verisk Data, Build a Transform & Unit Test with Code Whisperer](https://youtu.be/2c4hopaboVs)
-- [Part 2 - Run Collect to Cleanse](https://youtu.be/l2r2lBW2zXw)
-- [Part 3 - Run Cleanse to Consume & View Verisk Data](https://youtu.be/MayAPuUMvcg)
-
 - [1 Quickly gain insights with your data using AWS InsuranceLake](https://youtu.be/V9vP92kJnDk)
 - [2 Use Glue Data Quality with AWS InsuranceLake to define and enforce data rules](https://youtu.be/WDd8JunNpEQ)
 - [3 Use data lineage tracking and observability in your data pipeline to build trust with AWS InsuranceLake](https://youtu.be/mbG3Opq7P3c)
 - [4 Add custom data transformations using AWS InsuranceLake to quickly ingest 1st and 3rd party data](https://youtu.be/IDHmsFuZT2o)
-
-- [Data Quality](https://youtu.be/dUhzjX0eabM)
-- [Data Lineage](https://youtu.be/E8pjUZK62BI)
 
 
 ---------------------------
