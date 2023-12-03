@@ -226,6 +226,10 @@ Data Quality warning alerts
 Note on Transforms & Data Quality
 here might be situation where day and month is reversed and if for some dates the day is <=12 it will still transform them considering them as day while they are actually month. Similarly, as we have seen in the case of wrong formats where we expressed MM as mm it used its interpretation of facts.
 
+---------------------------
+Entity Match
+
+
 
 # Consume Data
 dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
@@ -234,7 +238,8 @@ dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name
 ## Spark SQL
 spark_<name>.sql - 1 statement in file is allowed
 
-
+- columns to rows
+spark stack function
 
 
 
@@ -602,6 +607,10 @@ Reorder - <describe briefly here>
 ---------------------------
 Duplicate Column Names
 Spark can handle duplicate column names by appending a number representing the index of the column.
+
+---------------------------
+Time Travel
+Track changes to claims from TPA
 
 # DevOps
 
