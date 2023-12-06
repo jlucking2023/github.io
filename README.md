@@ -50,6 +50,7 @@ AWS Services:
 To set the region that InsuranceLake is installed in see the lib/configuration.py file.
 - [30 minute QuickStart](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart) 
 - [60 minute QuickStart with CI/CD](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart-with-cicd)
+- [Full Deployment Guide (central CI/CD environment, and 3 deployment environments)[./full_deployment_guide.md]
 
 ---------------------------
 Make a change an deploy automatically with self-mutating CodePipeline
