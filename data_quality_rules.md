@@ -2,7 +2,7 @@
 
 Data quality in InsuranceLake is provided using Glue Data Quality rules managed in a per-workflow JSON configuration file. 
 
-The filename of the data quality rules configuration file follows a similar convention of `dq-<Database Name>-<Table Name>.json` and is stored in the `dq-rules` folder in the `etl-scripts` bucket.
+The filename of the data quality rules configuration file follows a similar convention of `dq-<database name>-<table name>.json` and is stored in the `dq-rules` folder in the `etl-scripts` bucket.
  
 The rules have the same format as Glue Data Quality rules created using the visual editor (except for the JSON requirements around double quotes).
 
@@ -46,7 +46,7 @@ InsuranceLake data quality configuration supports three types of actions to take
 
 Example data quality configuration file:
 
-```
+```json
 {
     "before_transform": {
         "quarantine_rules": [
