@@ -22,8 +22,8 @@
 |timestamp	|Convert specified date/time fields to ISO format based on known input format	|
 |decimal	|Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type	|
 |implieddecimal	|Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)	|
-|currency	|Convert specified numeric field with currnecy formatting to Decimal (fixed precision)	|
-|filterrows	|Filter out rows based on standard SQL WHERE statement	|
+|[currency](#currency)	|Convert specified numeric field with currnecy formatting to Decimal (fixed precision)	|
+|[filterrows](#filterrows)	|Filter out rows based on standard SQL WHERE statement	|
 |multilookup	|Add columns looked up from an external table using multiple conditions, returning any number of attributes	|
 |bigint	|Convert specified numeric column to bigint	|
 |titlecase	|Convert specified string column in DataFrame to title case	|
