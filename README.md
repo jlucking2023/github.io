@@ -46,6 +46,7 @@ AWS Services:
 8. KMS
 
 - [Detailed Collect-to-Cleanse transform reference](transforms.md)
+- [Data Quality reference](data_quality.md)
 
 # Installation
 To set the region that InsuranceLake is installed in see the lib/configuration.py file.
