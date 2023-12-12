@@ -2,7 +2,7 @@
 
 |Name	|Description	|
 |---	|---	|
-|[currency](#currency)	|Convert specified numeric field with currnecy formatting to Decimal (fixed precision)	|
+|[currency](#currency)	|Convert specified numeric field with currency formatting to Decimal (fixed precision)	|
 |[changetype](#changetype)	|Convert specified fields to decimal (fixed precision), int, bigint, string, etc.	|
 |[date](#date)	|Convert specified date fields to ISO format based on known input format	|
 |[implieddecimal](#implieddecimal)	|Convert specified numeric fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)	|
