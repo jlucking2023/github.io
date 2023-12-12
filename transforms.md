@@ -62,6 +62,9 @@ Convert specified numeric field with currnecy formatting to Decimal (fixed preci
 
 ### changetype
 Convert specified fields to decimal (fixed precision), int, bigint, string, etc.
+
+Field type syntax follows the [Spark simpleString](https://spark.apache.org/docs/3.3.0/api/python/_modules/pyspark/sql/types.html) definitions
+
 ```json
 "changetype": [
     {
@@ -228,7 +231,7 @@ Add column in DataFrame based on regexp group match pattern on the filename argu
 
 - Regular expression group matching syntax follows the [Python regular expression syntax](https://docs.python.org/3/library/re.html)
 
-- Only 1 (the first) match group will be used per specification block. For multiple groups, use multiple specification blocks and shift the parenthesis.
+- Only one (the first) match group will be used per specification block. For multiple groups, use multiple specification blocks and shift the parenthesis.
 
 - Use the ```required``` parameter to optionally halt the workflow if the pattern is not matched. Without ```required```, an unmatched group will be added as a null value string column.
 
