@@ -45,6 +45,7 @@ AWS Services:
 7. QuickSight
 8. KMS
 
+- [Detailed Collect-to-Cleanse transform reference](transforms.md)
 
 # Installation
 To set the region that InsuranceLake is installed in see the lib/configuration.py file.
