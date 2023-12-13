@@ -604,9 +604,10 @@ instructions on how to handle re-loading the same data file (perhaps Feb's Broke
 ---------------------------
 Schema Changes
 IL allows for three types of methods for handling schema changes:
-Permissive - <describe briefly here>
-Strict - <describe briefly here>
-Reorder - <describe briefly here>
+Permissive - Overwrite previous with incoming data
+Strict - Don't do anything, preserve the original
+Reorder - If schemas are all the same but the columns are out of order, put them in the original order
+Evolve - Merge changes
 
 
 ---------------------------
