@@ -1,12 +1,15 @@
 # InsuranceLake Collect-to-Cleanse Transform Index
 
-|Name	|Description	|
+|Formatting    |Description	|
 |---	|---	|
 |[currency](#currency)	|Convert specified numeric field with currency formatting to Decimal (fixed precision)	|
 |[changetype](#changetype)	|Convert specified fields to decimal (fixed precision), int, bigint, string, etc.	|
 |[date](#date)	|Convert specified date fields to ISO format based on known input format	|
 |[implieddecimal](#implieddecimal)	|Convert specified numeric fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)	|
 |[timestamp](#timestamp)	|Convert specified date/time fields to ISO format based on known input format	|
+
+|Data Manipulation    |Description	|
+|---	|---	|
 |[addcolumns](#addcolumns)	|Add two or more columns together in a new or existing column	|
 |[columnfromcolumn](#columnfromcolumn)	|Add or replace column in DataFrame based on regexp group match pattern	|
 |[columnreplace](#columnreplace)	|Add or replace a column in DataFrame with regex substitution on an existing column	|
@@ -21,9 +24,15 @@
 |[multilookup](#multilookup)	|Add columns looked up from an external table using multiple conditions, returning any number of attributes	|
 |[multiplycolumns](#multiplycolumns)	|Multiply two or more columns together in a new or existing column	|
 |[titlecase](#titlecase)	|Convert specified string column in DataFrame to title or proper case	|
+
+|Data Security    |Description	|
+|---	|---	|
 |[hash](#hash)	|Hash specified column values using SHA256	|
 |[redact](#redact)	|Redact specified column values using supplied redaction string	|
 |[tokenize](#tokenize)	|Replace specified column values with hash and store original value in DynamoDB table	|
+
+|Earned Premium    |Description	|
+|---	|---	|
 |[earnedpremium](#earnedpremium)	|Calculate monthly earned premium	|
 |[enddate](#enddate)	|Add a number of months to a specified date to get an ending/expiration date	|
 |[expandpolicymonths](#expandpolicymonths)	|Expand dataset to one row for each month the policy is active with a calculated earned premium	|
@@ -42,9 +51,10 @@
 ## Formatting
 
 ### currency
-Convert specified numeric field with currnecy formatting to Decimal (fixed precision)
+Convert specified numeric field with currency formatting to Decimal (fixed precision)
 
 - ```format``` parameter defaults to 16,2 if not specified
+- TODO: explain source & euro parameters
 
 ```json
 "currency": [
@@ -103,8 +113,10 @@ Date formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/
 
 ### implieddecimal
 Convert specified numeric fields to Decimal (fixed precision) type with implied decimal point support (i.e. last 2 digits are to the right of decimal)
+Note: Sedgwick e02 files contain currency data with no decimal point.
 
 - Use this transform to interpret decimal precision data stored in integer format, common in mainframe or flat file data formats.
+- TODO: explain use of num_implied and source parameters
 
 ```json
 "implieddecimal": [
