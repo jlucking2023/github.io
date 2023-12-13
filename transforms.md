@@ -53,8 +53,12 @@
 ### currency
 Convert specified numeric field with currency formatting to Decimal (fixed precision)
 
-- ```format``` parameter defaults to 16,2 if not specified
-- TODO: explain source & euro parameters
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the field in the Cleanse layer table    |
+|format    |required    |? ,defaults to 16,2 if not specified    |
+|source    |optional    |used for Data Lineage tracking    |
+|euro    |optional    |?    |
 
 ```json
 "currency": [
@@ -75,6 +79,10 @@ Convert specified fields to decimal (fixed precision), int, bigint, string, etc.
 
 Field type syntax follows the [Spark simpleString](https://spark.apache.org/docs/3.3.0/api/python/_modules/pyspark/sql/types.html) definitions
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+
+
 ```json
 "changetype": [
     {
@@ -91,7 +99,11 @@ Field type syntax follows the [Spark simpleString](https://spark.apache.org/docs
 ### date
 Convert specified date fields to ISO format based on known input format
 
-Date formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html).
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the field in the Cleanse layer table    |
+|format    |required    |Date formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html)    |
+|source    |optional    |used for Data Lineage tracking    |
 
 ```json
 "date": [
@@ -116,7 +128,6 @@ Convert specified numeric fields to Decimal (fixed precision) type with implied 
 Note: Sedgwick e02 files contain currency data with no decimal point.
 
 - Use this transform to interpret decimal precision data stored in integer format, common in mainframe or flat file data formats.
-- TODO: explain use of num_implied and source parameters
 
 |Parameter    |Type    |Description    |
 |---	|---	|---	|
@@ -143,7 +154,11 @@ Note: Sedgwick e02 files contain currency data with no decimal point.
 ### timestamp
 Convert specified date/time fields to ISO format based on known input format
 
-Timestamp formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html).
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the field in the Cleanse layer table    |
+|format    |required    |Timestamp formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html)    |
+|source    |optional    |used for Data Lineage tracking    |
 
 ```json
 "timestamp": [
@@ -161,6 +176,10 @@ Timestamp formats use [Spark datetime patterns](https://spark.apache.org/docs/la
 
 ### titlecase
 Convert specified string field to title or proper case
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+
 ```json
 "titlecase": [
     "CompanyName",
@@ -177,6 +196,11 @@ Add two or more columns together in a new column
 
 - TODO: there is only one field listed in source_columns
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the new field to be added to the Cleanse layer table    |
+|source_columns    |required    |list of fields to be added (what does added mean - concatenated?    |
+|source    |optional    |used for Data Lineage tracking    |
 
 ```json
 "addcolumns": [
