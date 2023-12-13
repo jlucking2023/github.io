@@ -53,6 +53,8 @@
 ### currency
 Convert specified numeric field with currency formatting to Decimal (fixed precision)
 
+- While this transform will work on numeric fields, we recommend `changetype` to convert to decimal values because it is more efficient when combined with other data type changes.
+
 |Parameter    |Type    |Description    |
 |---	|---	|---	|
 |field    |required    |name of the field in the Cleanse layer table    |
@@ -84,16 +86,14 @@ Field type syntax follows the [Spark simpleString](https://spark.apache.org/docs
 
 
 ```json
-"changetype": [
-    {
-        "ExpiringPremiumAmount": "decimal(10,2)",
-        "WrittenPremiumAmount": "decimal(10,2)",
-        "EarnedPremium": "decimal(10,2)",
-        "PrimaryKeyId": "bigint",
-        "GrowingCount": "bigint",
-        "PolicyKey": "string"
-    }
-]
+"changetype": {
+    "ExpiringPremiumAmount": "decimal(10,2)",
+    "WrittenPremiumAmount": "decimal(10,2)",
+    "EarnedPremium": "decimal(10,2)",
+    "PrimaryKeyId": "bigint",
+    "GrowingCount": "bigint",
+    "PolicyKey": "string"
+}
 ```
 
 Note: decimal transform has been removed and replaced with changetype transform.
