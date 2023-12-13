@@ -57,7 +57,7 @@ Convert specified numeric field with currency formatting to Decimal (fixed preci
 |---	|---	|---	|
 |field    |required    |name of the field in the Cleanse layer table    |
 |format    |required    |? ,defaults to 16,2 if not specified    |
-|source    |optional    |used for Data Lineage tracking    |
+|source    |optional    |?    |
 |euro    |optional    |?    |
 
 ```json
@@ -96,6 +96,25 @@ Field type syntax follows the [Spark simpleString](https://spark.apache.org/docs
 ]
 ```
 
+Note: decimal transform has been removed and replaced with changetype transform.
+- decimal : Convert specified numeric field (usually Float or Double) fields to Decimal (fixed precision) typ "decimal"
+```
+  "decimal": [
+        {
+          "field": "ExpiringPremiumAmount",
+          "format": "10,2"
+        },
+        {
+          "field": "WrittenPremiumAmount",
+          "format": "10,2"
+        },
+        {
+          "field": "EarnedPremium",
+          "format": "10,2"
+        }
+        ]
+```
+
 ### date
 Convert specified date fields to ISO format based on known input format
 
@@ -103,7 +122,7 @@ Convert specified date fields to ISO format based on known input format
 |---	|---	|---	|
 |field    |required    |name of the field in the Cleanse layer table    |
 |format    |required    |Date formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html)    |
-|source    |optional    |used for Data Lineage tracking    |
+|source    |optional    |?    |
 
 ```json
 "date": [
@@ -134,7 +153,7 @@ Note: Sedgwick e02 files contain currency data with no decimal point.
 |field    |required    |name of the field in the Cleanse layer table    |
 |num_implied    |optional    |number of implied decimal points, default 2    |
 |format    |required    |decimal precision, scale    |
-|source    |optional    |used for Data Lineage tracking    |
+|source    |optional    |?    |
 
 ```json
 "implieddecimal": [
@@ -158,7 +177,7 @@ Convert specified date/time fields to ISO format based on known input format
 |---	|---	|---	|
 |field    |required    |name of the field in the Cleanse layer table    |
 |format    |required    |Timestamp formats use [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html)    |
-|source    |optional    |used for Data Lineage tracking    |
+|source    |optional    |?    |
 
 ```json
 "timestamp": [
@@ -200,7 +219,7 @@ Add two or more columns together in a new column
 |---	|---	|---	|
 |field    |required    |name of the new field to be added to the Cleanse layer table    |
 |source_columns    |required    |list of fields to be added (what does added mean - concatenated?    |
-|source    |optional    |used for Data Lineage tracking    |
+|source    |optional    |?    |
 
 ```json
 "addcolumns": [
@@ -219,6 +238,12 @@ Add or replace column in DataFrame based on regexp group match pattern
 - Uses [Spark regexp_extract function](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.regexp_extract.html).
 
 - Regular expressions follow the [Java Pattern syntax](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html).
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the new field to be added to the Cleanse layer table    |
+|source    |required    |?    |
+|pattern    |required    |regular expression    |
 
 ```json
 "columnfromcolumn": [
@@ -263,6 +288,12 @@ Add column to DataFrame using format string and source columns
 
 - Uses [Python format string syntax](https://docs.python.org/3/library/string.html#format-string-syntax). Keyword arguments are not supported. Implicit references, positional references, and the [format specification mini-language](https://docs.python.org/3/library/string.html#format-specification-mini-language) are supported.
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |name of the new field to be added to the Cleanse layer table    |
+|format    |required    |?    |
+|source_columns    |required    |list of fields to be combined    |
+
 ```json
 "combinecolumns": [
     {
@@ -281,6 +312,12 @@ Add column in DataFrame based on regexp group match pattern on the filename argu
 - Only one (the first) match group will be used per specification block. For multiple groups, use multiple specification blocks and shift the parenthesis.
 
 - Use the ```required``` parameter to optionally halt the workflow if the pattern is not matched. Without ```required```, an unmatched group will be added as a null value string column.
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|pattern    |required    |?    |
+|required    |required    |?    |
 
 ```json
 "filename": [
@@ -306,6 +343,11 @@ Fill starting column value down the columns for all null values until the next n
 
 - Specify ```sort``` to order the data prior to filling down. Note that this will change the sort order of the data for subsequent transforms.
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|sort    |required    |?    |
+
 ```json
 "filldown": [
     {
@@ -325,6 +367,10 @@ Filter out rows based on standard SQL WHERE statement
 
 - Use only when certain rows can be systematically and confidently discarded. Examples of usage include removing blank rows, removing a totals rows, or removing subtotal rows. If review of filtered data is desired, consider using [data quality quarantine rules](./data_quality.md).
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|condition    |required    |?    |
+
 ```json
 "filterrows": [
     {
@@ -338,6 +384,12 @@ Filter out rows based on standard SQL WHERE statement
 
 ### flipsign
 Flip the sign of a numeric column in a Spark DataFrame, optionally in a new column 
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|source    |required    |?    |
+
 ```json
 "flipsign": [
     {
@@ -366,6 +418,14 @@ Add column to DataFrame with static/literal value supplied in specification
 Replace specified column values with values looked up from an dynamodb table
 - Future: use / enhance existing DynamoDB load python code (located here?)
 - Future: add a copy between Dev-Test-Prod in DevSecOps Process
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "lookup": [
     {
@@ -385,6 +445,12 @@ Replace specified column values with values looked up from an dynamodb table
 Merge column values using coalesce 
 
 - Optionally specify a literal default value to use if all specified columns have a null value. Defaults to null.
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|source_list    |required    |?    |
+|default    |optional    |?    |
 
 ```json
 "merge": [
@@ -419,6 +485,13 @@ Use the AWS Console for the DynamoDB service to confirm that the data is loaded 
 
 Now insert the multilookup specification into your dataset’s transformation spec file (in the transform_spec section). An example follows:
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "multilookup": [
     {
@@ -448,6 +521,13 @@ Multiply two or more columns together in a new or existing column
 - Use for calculating premium splits
 - ```empty_value``` parameter is optional and defaults to a value of 1.
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "multiplycolumns": [
     {
@@ -464,6 +544,14 @@ Multiply two or more columns together in a new or existing column
 
 ### hash
 Hash specified column values using SHA256
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "hash": [
     "InsuredContactCellPhone",
@@ -476,6 +564,13 @@ Redact specified column values using supplied redaction string
 
 - Note that the transform is defined using a dictionary of field/value pairs, not a list.
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "redact": {
     "CustomerNo": "****"
@@ -486,6 +581,13 @@ Redact specified column values using supplied redaction string
 Replace specified column values with hash and store original value in DynamoDB table
 
 - The ```<environment>-insurancelake-etl-hash-values``` DynamoDB table will be used for storage of all tokens. Since the hashing is deterministic, each value will only be stored once, regardless of how many columns contain the value.
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
 
 ```json
 "tokenize": [
@@ -508,6 +610,13 @@ Calculate monthly earned premium
 
 - For the `policy_effective_date` and ```policy_expiration_date``` parameters indicate the date columns for determining the lifetime of the policy. If ```byday``` is true, they will be used to pro-rate the earned premium for the first and last months of the policy. If ```byday``` is false, they will be used to identify the number of active policy months (always a whole number).
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "earnedpremium": [
     {
@@ -526,6 +635,14 @@ Calculate monthly earned premium
 
 ### enddate
 Add a number of months to a specified date to get an ending/expiration date
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "enddate": [
     {
@@ -547,6 +664,13 @@ Expand dataset to one row for each month the policy is active with a calculated 
 
 - Optionally use the ```uniqueid``` parameter to specify a field name to add with a generated GUID, unique to each policy.
 
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
+
 ```json
 "expandpolicymonths": {
     "policy_effective_date": "EffectiveDate",
@@ -562,6 +686,13 @@ Expand dataset to one row for each month the policy is active with a calculated 
 Calculate number of months between policy start/end dates
 
 - Optionally specify the ```normalized``` parameter as ```true``` to always return a whole number of months. If ommited ```normalized``` defaults to ```false``` and the number of months returned is a fractional number based on the exact number of days between the effective and expiration dates.
+
+|Parameter    |Type    |Description    |
+|---	|---	|---	|
+|field    |required    |?    |
+|lookup    |required    |?    |
+|source    |optional    |?    |
+|nomatch    |optional    |?    |
 
 ```json
 "policymonths": [
