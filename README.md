@@ -213,9 +213,11 @@ Commas are not allowed in any column as they are used to indicate the next colum
 
 ---------------------------
 ## Transforms
+[Detailed Collect-to-Cleanse transform reference](transforms.md)
 
 ---------------------------
 ## Data Quality Rules
+[Data Quality reference](data_quality.md)
 
 quarantine
 Build and test insurance data quality rules
