@@ -67,26 +67,10 @@ No VPC's needed
 # Collect Data
 dev-insurancelake-<account ID>-us-east-2-collect > <database name> > <table name>
 
----------------------------
-CSV Files
-Add the following code block to your transform JSON file. This should be at the very top of the file.
-```
-```
+## File Format and Input Specification
 
----------------------------
-Fixed Width Files
-Add the following code block to your transform JSON file. This should be at the very top of the file.
-```
-{
-  "input_spec": {     
-    "fixed": {
-    
-    }
-  },
-  "transform_spec": {      
-  }
-}
-```
+[Detailed File Format and Input Specification Documentation](file_formats.md)
+
 Note on Sedgewick e02 fixed width data files: to handle zero-padded data fields the columnreplace transform was created to convert them into null values
 
 Sedgwick e02 Claim Interface File Option 1: manually split files
@@ -175,41 +159,12 @@ grep ^CLM e02file > e02file-claims
 
 Sedgwick e02 Claim Interface File Option 2: use lambda split file function
 
----------------------------
-Excel Files
-Add the following code block to your transform JSON file. This should be at the very top of the file.
-```
-"input_spec": {
-    "excel": {
-        "sheet_names": [
-            "Sheet1"
-        ],
-        "data_address": "A1",
-        "header": true,
-        "password": ""
-    }
-},
-```
-
-
----------------------------
-Parquet Files
-Parquet file in the Collect bucket support (Parquet files should be uploaded by themselves, i.e. without any partition folder structure)
-
-
 # Cleanse Data
 dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
 
 ---------------------------
 ## Mapping
-Commas are not allowed in any column as they are used to indicate the next column.
-- SourceName : required, must be the first column and match the column names in the 1 row of the data file, if there are no column names then col_1, col_2, col_(n+1) should be used.
-- DestName : required, must be the 2nd column and contain all lower case characters.
-- Description : optional column that can contain any character.
-- Width : required for Fixed Width Files, must be the third column and contain only a positve integer.
-- Threshold : ?
-- Score : ?
-
+[Detailed Schema Mapping Documentation](schema_mapping.md)
 
 ---------------------------
 ## Transforms
@@ -219,21 +174,20 @@ Commas are not allowed in any column as they are used to indicate the next colum
 ## Data Quality Rules
 [Data Quality reference](data_quality.md)
 
-quarantine
-Build and test insurance data quality rules
-
-* warn
-* fail
-
-Data Quality rule descriptions
-Data Quality warning alerts
+Roadmap:
+- Data Quality rule descriptions
+- Integrated Data Quality warning alerts
 
 Note on Transforms & Data Quality
 here might be situation where day and month is reversed and if for some dates the day is <=12 it will still transform them considering them as day while they are actually month. Similarly, as we have seen in the case of wrong formats where we expressed MM as mm it used its interpretation of facts.
 
 ---------------------------
-Entity Match
+# Entity Match
 
+Time Travel
+Track changes to claims from TPA
+
+Full documentation in development
 
 
 # Consume Data
@@ -247,9 +201,6 @@ spark_<name>.sql - 1 statement in file is allowed
 spark stack function
 
 
-
-
-
 ---------------------------
 ## Athena SQL
 athena_<name>.sql - multiple statements in file is allowed
@@ -260,87 +211,15 @@ athena_<name>.sql - multiple statements in file is allowed
 # MonitorData Lineage
 
 
-# Using Transforms
-The order that you enter the transforms into the json file is very important . Each transform is executed on the incoming dataset starting from the beginning of the transform_spec section of the file.
-
-# Entity Match
-
-
 # Operation
 ---------------------------
-Partitions
 
+## Partitions
 
-
----------------------------
 Purge and Reload Data
 Replace a previously loaded dataset (same day and different day)
 instructions on how to handle re-loading the same data file (perhaps Feb's Broker A data had an error and you want to reload it)
 
-
----------------------------
-Schema Changes
-IL allows for three types of methods for handling schema changes:
-Permissive - Overwrite previous with incoming data
-Strict - Don't do anything, preserve the original
-Reorder - If schemas are all the same but the columns are out of order, put them in the original order
-Evolve - Merge changes
-
-
----------------------------
-Duplicate Column Names
-Spark can handle duplicate column names by appending a number representing the index of the column.
-
----------------------------
-Time Travel
-Track changes to claims from TPA
-
 # DevOps
 
----------------------------
-dev-insurancelake-cleanse-to-consume-job
-
-Python library path
-s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. custom_mapping.py,
-02. datalineage.py,
-03. dataquality_check.py,
-04. datatransform_dataprotection.py,
-05. datatransform_lookup.py,
-06. datatransform_premium.py,
-07. datatransform_premiumdemo.py,
-08. datatransform_regex.py,
-09. datatransform_typeconversion.py,
-10. glue_catalog_helpers.py
-
-Dependent JARs path
-s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. openlineage-spark-0.29.2.jar,
-02. poi-ooxml-5.2.3.jar,
-03. spark-excel_2.12-3.3.1_0.18.7.jar,
-04. xmlbeans-5.1.1.jar
-
-
----------------------------
-dev-insurancelake-collect-to-cleanse-job
-
-Python library path
-s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. custom_mapping.py,
-02. datalineage.py,
-03. dataquality_check.py,
-04. datatransform_dataprotection.py,
-05. datatransform_lookup.py,
-06. datatransform_premium.py,
-07. datatransform_premiumdemo.py,
-08. datatransform_regex.py,
-09. datatransform_reshape.py,
-10. datatransform_typeconversion.py,
-11. glue_catalog_helpers.py
-
-Dependent JARs path
-s3://dev-insurancelake-<AWS Account Number>-us-east-2-etl-scripts/etl/lib/
-01. openlineage-spark-0.29.2.jar,
-02. poi-ooxml-5.2.3.jar,
-03. spark-excel_2.12-3.3.1_0.18.7.jar,
-04. xmlbeans-5.1.1.jar
+[Detailed Developer Guide](developer_guide.md)
