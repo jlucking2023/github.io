@@ -199,11 +199,11 @@ Example configuration:
         systems that use Proleptic Gregorian calendar.
         ```
 
-    To avoid this sissue, we recommend importing the Excel file first with no date conversion. Specifically:
-        1. Import the Excel workbook with no `date` or `timestamp` transform
-        1. Note the field type that Spark chooses for your date columns
-        1. If the field is already a date or timestamp, it may mean that Spark was able to detect the date format and there is no need for a date transform. To confirm, ensure the date field values are correct.
-        1. If the field is a string, note the format of the date field values and add a `date` or `timestamp` transform for the field.
+    To avoid this issue, we recommend importing the Excel file first with no date conversion. Specifically:
+    1. Import the Excel workbook with no `date` or `timestamp` transform
+    1. Note the field type that Spark chooses for your date columns
+    1. If the field is already a date or timestamp, it may mean that Spark was able to detect the date format and there is no need for a date transform. To confirm, ensure the date field values are correct.
+    1. If the field is a string, note the format of the date field values and add a `date` or `timestamp` transform for the field.
 
 * You may experience issues importing Excel workbooks with macros that are used to write cells containing data you want to import. The Spark Excel library is subject to the [limitations of the Apache POI project](https://poi.apache.org/components/spreadsheet/limitations.html).
 

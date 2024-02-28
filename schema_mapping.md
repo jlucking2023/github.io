@@ -154,6 +154,7 @@ Consider a data source with column headers:
 
 |Date<br>Closed    |Vehicle<br>Make   |Vehicle<br>Model  |Claim/Incident/<br>Report
 |---    |---    |---    |---
+|   |   |   |
 
 ### Exact Matching
 
