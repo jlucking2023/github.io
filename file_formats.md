@@ -6,6 +6,7 @@
 * [CSV](#csv-comma-separated-value)
 * [TSV](#tsv-tab-separated-value)
 * [JSON](#json)
+* [Fixed Width](#fixed-width)
 * [Parquet](#parquet)
 * [Microsoft Excel Format Support](#microsoft-excel-format-support)
     * [Obtaining the Driver](#obtaining-the-driver)
@@ -25,6 +26,7 @@ Input specification configuration is defined in the `input-spec` section of the 
 |csv    |Section to specify CSV file specific configuration
 |tsv    |Section to specify TSV file specific configuration
 |parquet    |Section to indicate parquet input file support
+|json   |Section to specify JSON file specific configuration
 |fixed   |Section to indicate fixed width input file support
 |excel  |Section to specify Excel file specific configuration
 
@@ -42,7 +44,6 @@ Example of other data pipeline configuration parameters:
     }
 }
 ```
-
 
 ## CSV (Comma Separated Value)
 
@@ -82,10 +83,21 @@ Example of a configuration for a TSV file with a header row:
 
 ## JSON
 
-JSON input files are identified with the file extensions `.json` and `.jsonl`. No configuration section is needed to indicate JSON input file support.
+JSON input files are identified with the file extensions `.json` and `.jsonl`.
 
-Spark will determine the type of JSON file based on the file extension: files with the `json` extension will be read as single multi-line records; files with the `jsonl` extension will be read as [JSONLines formatted](http://jsonlines.org/) multi-record files.
+Single line JSON or [JSONLines formatted](http://jsonlines.org/) multi-record files are supported by default. To support multiline single-record JSON, use the `multiline` parameter.
 
+Example of a configuration for a single-record multiline JSON file:
+
+```json
+{
+    "input_spec": {
+        "json": {
+            "multiline": true
+        }
+    }
+}
+```
 
 ## Fixed Width
 
@@ -103,13 +115,11 @@ Example of a configuration for a fixed width file:
 }
 ```
 
-
 ## Parquet
 
 Parquet files are identified either by the input file extension `parquet` or by specifying `parquet` in the `input_spec` configuration.
 
 Parquet files will be read one at a time, each initating a separate ETL pipeline workflow, and no folder structure discovery will be performed. The following compression formats are supported transparently: uncompressed, snappy, gzip, lzo ([AWS Glue documentation reference](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-format-parquet-home.html#aws-glue-programming-etl-format-parquet-reference)).
-
 
 ## Microsoft Excel Format Support
 
