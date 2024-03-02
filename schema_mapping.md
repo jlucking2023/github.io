@@ -123,7 +123,7 @@ Claim AMT6,Null
 
 Fuzzy matching of column names for schema mapping is implemented in InsuranceLake using [the RapidFuzz Python library](https://github.com/rapidfuzz/RapidFuzz).
 
-To use fuzzy matching in your schema mapping file, add the columns `Threshhold` and `Scorer`. These columns do not need to be defined for every column in the schema mapping, only for the columns where you want to use fuzzy matching to map schema.
+To use fuzzy matching in your schema mapping file, add the columns `Threshold` and `Scorer`. These columns do not need to be defined for every column in the schema mapping, only for the columns where you want to use fuzzy matching to map schema.
 
 Fuzzy matching is always performed after direct schema mapping of fields. Only the fields from the source file that were not directly mapped are used for fuzzy matching. When a field is successfully fuzzy matched, it is removed from the available fields for subsequent fuzzy matching. This strategy increases the chances you will get the matches you are expecting.
 
@@ -150,7 +150,7 @@ NewRenewal,NewOrRenewal,90,ratio
 
 The InsuranceLake ETL can handle mapping columns with line breaks using exact matching or fuzzy matching.
 
-Consider a data source with column headers:
+Consider a data source with the following column headers:
 
 |Date<br>Closed    |Vehicle<br>Make   |Vehicle<br>Model  |Claim/Incident/<br>Report
 |---    |---    |---    |---
@@ -220,7 +220,7 @@ The schema mapping configuration can be used to flatten nested data structures.
 
 Fuzzy matching is available for nested data and will match on the fully expressed nested entity names (in other words, `contacts.role.name`)
 
-**The schema mapping file cannot be used to rename/map fields within nested data structures in place. When no mapping file is present, the recommended schema mapping file will only contain the first level of the nested data structure. This behavior reflects the ability of Spark's alias function; it can only rename columns in the first level.**
+**The schema mapping file cannot be used to rename/map fields in place within nested data structures. When no mapping file is present, the recommended schema mapping file will only contain the first level of the nested data structure. This behavior reflects the ability of Spark's alias function; it can only rename columns in the first level.**
 
 See [changetype documentation](./transforms.md#changetype) for a different method to rename fields in place within a nested data structure.
 
