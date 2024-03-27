@@ -47,9 +47,9 @@
 |[merge](#merge)	|Merge columns using coalesce
 |[rownumber](#rownumber)  |Adds row number column to rows based on a partition column list
 
-# Using Transforms
+## Using Transforms
 
-- Transform configuration is specified in the `transform-spec` section of the JSON configuration file. The filename follows the convention of `<database name>-<table name>.json` and is stored in the `/etl/transformation-spec` folder in the `etl-scripts` bucket. When using CDK for deployment, the contents of `/lib/glue_scripts/lib/transformation-spec` directory will be automatically deployed to this location.
+- Transform configuration is specified in the `transform-spec` section of the workflow's JSON configuration file. The filename follows the convention of `<database name>-<table name>.json` and is stored in the `/etl/transformation-spec` folder in the `etl-scripts` bucket. When using CDK for deployment, the contents of the `/lib/glue_scripts/lib/transformation-spec` directory will be automatically deployed to this location.
 
 - For an example of all transforms in one place, refer to the [all-transforms-example.json](../lib/glue_scripts/transformation-spec/all-transforms-example.json) in the `transformation-spec` directory of the repository.
 
@@ -58,6 +58,21 @@
 - Each transform type can only be used once in the transform specification. This limitation helps the transform implementation reduce the number of Spark withColumn statements (using withColumns or select), and [optimize the workflow performance](https://medium.com/@manuzhang/the-hidden-cost-of-spark-withcolumn-8ffea517c015).
 
 - Except where noted, transforms will overwrite an existing field if specified as the result field. Where available use the `source` parameter to indicate that a different column should be used as the source data, and the column specified in the `field` parameter should be used for the result value. Specifying a source field to create a new column for transforms is useful for debugging issues with a transform, preserving original data, or having a backup datapoint available when incoming data formats are less clear.
+
+## Behavior When There is No Transformation Specification
+
+When there is transformation specification file or an empty transformation specification in the etl-scripts bucket for the workflow, **the ETL will perform no transformations**. However, the ETL will save a *recommended* transformation specification file to the Glue Temp bucket,  `<environment>-insurancelake-<account>-<region>-glue-temp` bucket, in the folder `/etl/collect_to_cleanse` following the naming convention `<database>-<table>.json`.
+
+When this behavior occurs, you will see the following log message in the Glue Job Output Logs:
+```log
+No transformation specification found, generating recommended spec to: s3://...
+```
+
+This recommended transformation specification file can be used as a starting point to build your own transformations.  Currently the recommended transformation specification supports the following:
+* `decimal` transforms for any fields that Spark identifies as `float` or `double`
+* `date` transforms for any fields that contain the text `date` in the field names
+* `timestamp` transforms for any fields that contain the text `time` in the field names
+* `input_spec` section for Excel files identified by their extension with default values
 
 ---
 
@@ -122,6 +137,16 @@ Convert specified date fields to ISO format based on known input format
 |field    |required    |Name of (destination) field to hold the resulting date conversion, and source field if source not specified separately
 |format    |required    |Date format specified using [Spark datetime patterns](https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html)
 |source    |optional    |Name of source field, defaults to destination field
+
+- With Spark datetime patterns, `M` (uppercase) means **month** and `m` (lowercase) means **minutes**. Mixing these up will result  in date parse errors.
+
+- Use `dd` to indicate exactly two digit dates, and `d` to indicate **either one or two** digits dates. This applies to all other symbols in the datetime pattern. Single character symbols are the most flexible.
+
+- An error similar to the following typically means that some or all of your dates are not formatted in the way the date pattern expects. Consider using [data quality rules](./data_quality.md#configuration) to test your data.
+    ```log
+    You may get a different result due to the upgrading of Spark 3.0
+    Fail to parse 'YYYY-M-d' in the new parser. You can set spark.sql.legacy.timeParserPolicy to LEGACY to restore the behavior before Spark 3.0, or set to CORRECTED and treat it as an invalid datetime string.
+    ```
 
 ```json
 "date": [
