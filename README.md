@@ -55,7 +55,7 @@ AWS Services:
 
 ### User Documentation
 * [Detailed Collect-to-Cleanse transform reference](transforms.md)
-* [Schema Mapping Documentation](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/resources/schema_mapping.md)
+* [Schema Mapping Documentation](schema_mapping.md)
 * [File Formats and Input Specification Documentation](file_formats.md)
 * [Data quality rules with Glue Data Quality reference](data_quality.md)
 * [Using SQL for Cleanse-to-Consume](using_sql.md)
