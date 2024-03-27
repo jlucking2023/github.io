@@ -45,49 +45,79 @@ AWS Services:
 7. QuickSight
 8. KMS
 
-- [Detailed Collect-to-Cleanse transform reference](transforms.md)
-- [Data Quality reference](data_quality.md)
+## Contents
 
-# Installation
-To set the region that InsuranceLake is installed in see the lib/configuration.py file.
-- [30 minute QuickStart](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart) 
-- [60 minute QuickStart with CI/CD](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/README.md#quickstart-with-cicd)
-- [Full Deployment Guide (central CI/CD environment, and 3 deployment environments](./full_deployment_guide.md)
+### Installation
+* [30 minute QuickStart](README-ETL.md#quickstart) 
+* [60 minute QuickStart with CI/CD](README-ETL.md#quickstart-with-cicd)
+* [Full Deployment Guide (central CI/CD environment, and 3 deployment environments](full_deployment_guide.md)
 
----------------------------
+### User Documentation
+* [Detailed Collect-to-Cleanse transform reference](transforms.md)
+* [Schema Mapping Documentation](https://github.com/aws-samples/aws-insurancelake-etl/blob/main/resources/schema_mapping.md)
+* [File Formats and Input Specification Documentation](file_formats.md)
+* [Data quality rules with Glue Data Quality reference](data_quality.md)
+* [Using SQL for Cleanse-to-Consume](using_sql.md)
+
+### Developer Documentation
+* [Developer Guide](developer_guide.md)
+* [AWS CDK Detailed Instructions](cdk_instructions.md)
+* [Github / CodePipeline Integration Guide](github_guide.md)
+
+
+## Configuration
 Make a change an deploy automatically with self-mutating CodePipeline
 
----------------------------
 No VPC's needed
 - InsuranceLake can be deployed with no VPC(s) simply by removing the subnet definition in configuration.py.
 - The public subnet is completely optional as well. InsuranceLake does not require any VPC, so it also does not require public subnets. Creating a VPC with half public subnets and half private is the default behavior. You can modify this by passing the subnet_configuration parameter to the VPC creation in lib/vpc_stack.py.
 - If the VPC is enabled in InsuranceLake, Glue is really the only service that will use it, and specifically, for Glue connections. If you try this out, you’ll see that the Glue connections specifically select the private subnet from the InsuranceLake-created VPC, through the vpc.subnets method.
 
+To set the region that InsuranceLake is installed in see the lib/configuration.py file.
 
-# Collect Data
+
+## Collect Data
 dev-insurancelake-<account ID>-us-east-2-collect > <database name> > <table name>
-
-## File Format and Input Specification
 
 [Detailed File Format and Input Specification Documentation](file_formats.md)
 
-Note on Sedgewick e02 fixed width data files: to handle zero-padded data fields the columnreplace transform was created to convert them into null values
 
-Sedgwick e02 Claim Interface File Option 1: manually split files
-Fixed Length files need a mapping file with these 3 columns: SourceName,DestName,Width.
-Width is the length of the field.
+## Cleanse Data
+dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
 
-How to handle fixed length files with multiple record types where each type has a different layout?
-See this file e02-Claims.csv for an example of a mapping file for record type ''.
-```
-SourceName,DestName,Width
-record_type,record_type,3
-client_id,client_id,4
-client_account,client_account,8
-client_location,client_location,6
-claim_number,claim_number,18
-etc...
-```
+[Detailed Schema Mapping Documentation](schema_mapping.md)
+[Detailed Collect-to-Cleanse transform reference](transforms.md)
+[Data Quality reference](data_quality.md)
+
+
+## Consume Data
+dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
+
+[Using SQL for Cleanse-to-Consume](using_sql.md)
+
+
+## Entity Match
+
+Time Travel
+Track changes to claims from TPA
+
+Full documentation in development
+
+
+## Operation
+
+### Partitions
+
+Purge and Reload Data
+Replace a previously loaded dataset (same day and different day)
+instructions on how to handle re-loading the same data file (perhaps Feb's Broker A data had an error and you want to reload it)
+
+### Monitor Data Quality
+
+### Monitor Data Lineage
+
+
+## Notes
 
 See this file e02-Claims.json for an example of a transform spec file.
 note: date and implieddecimal fields removed for brevity.
@@ -151,7 +181,9 @@ note: date and implieddecimal fields removed for brevity.
 }
 ```
 
-Here's how to perform a manual separation of record types:
+Zero filled date values can be handled with the columnreplace transform, which was created to convert them into null values
+
+Sedgwick e02 Claim Interface File Option 1: manually split files into separate files for each record type (because each record type has a different schema)
 ```
 grep ^<record type code> e02file > e02file-filtered
 grep ^CLM e02file > e02file-claims
@@ -159,67 +191,7 @@ grep ^CLM e02file > e02file-claims
 
 Sedgwick e02 Claim Interface File Option 2: use lambda split file function
 
-# Cleanse Data
-dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
-
----------------------------
-## Mapping
-[Detailed Schema Mapping Documentation](schema_mapping.md)
-
----------------------------
-## Transforms
-[Detailed Collect-to-Cleanse transform reference](transforms.md)
-
----------------------------
-## Data Quality Rules
-[Data Quality reference](data_quality.md)
-
-Roadmap:
+## Roadmap
 - Data Quality rule descriptions
 - Integrated Data Quality warning alerts
 
-Note on Transforms & Data Quality
-here might be situation where day and month is reversed and if for some dates the day is <=12 it will still transform them considering them as day while they are actually month. Similarly, as we have seen in the case of wrong formats where we expressed MM as mm it used its interpretation of facts.
-
----------------------------
-# Entity Match
-
-Time Travel
-Track changes to claims from TPA
-
-Full documentation in development
-
-
-# Consume Data
-dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
-
----------------------------
-## Spark SQL
-spark_<name>.sql - 1 statement in file is allowed
-
-- columns to rows
-spark stack function
-
-
----------------------------
-## Athena SQL
-athena_<name>.sql - multiple statements in file is allowed
-
-# Monitor Data Quality
-
-
-# MonitorData Lineage
-
-
-# Operation
----------------------------
-
-## Partitions
-
-Purge and Reload Data
-Replace a previously loaded dataset (same day and different day)
-instructions on how to handle re-loading the same data file (perhaps Feb's Broker A data had an error and you want to reload it)
-
-# DevOps
-
-[Detailed Developer Guide](developer_guide.md)
