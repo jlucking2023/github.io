@@ -5,8 +5,8 @@ The fun begins when you start to use and analyze your data. For starters check t
 - [Gaining insights into Combined Ratio and Claims](https://youtu.be/qEbxU9Q6uVc)
 - [Measuring agents book of business](https://youtu.be/Qx-iKbyYNDI)
 - [QuickSight DemoCentral try out the dashboards and click the icon on the left with the pencil to go into developer view](https://democentral.learnquicksight.online/#)
-- [General Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-General-Insurance)
-- [Life Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-Life-Insurance)
+	- [General Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-General-Insurance)
+	- [Life Insurance Dashboard](https://democentral.learnquicksight.online/#Dashboard-DashboardDemo-Life-Insurance)
 
 
 ---------------------------
@@ -51,6 +51,7 @@ AWS Services:
 * [30 minute QuickStart](README-ETL.md#quickstart) 
 * [60 minute QuickStart with CI/CD](README-ETL.md#quickstart-with-cicd)
 * [Full Deployment Guide (central CI/CD environment, and 3 deployment environments](full_deployment_guide.md)
+* [InsuranceLake Quickstart Self-paced Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/c556569f-5a26-494f-88e1-bac5a55adf2a)
 
 ### User Documentation
 * [Detailed Collect-to-Cleanse transform reference](transforms.md)
@@ -79,21 +80,21 @@ To set the region that InsuranceLake is installed in see the lib/configuration.p
 ## Collect Data
 dev-insurancelake-<account ID>-us-east-2-collect > <database name> > <table name>
 
-[Detailed File Format and Input Specification Documentation](file_formats.md)
+* [Detailed File Format and Input Specification Documentation](file_formats.md)
 
 
 ## Cleanse Data
 dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
 
-[Detailed Schema Mapping Documentation](schema_mapping.md)
-[Detailed Collect-to-Cleanse transform reference](transforms.md)
-[Data Quality reference](data_quality.md)
+* [Detailed Schema Mapping Documentation](schema_mapping.md)
+* [Detailed Collect-to-Cleanse transform reference](transforms.md)
+* [Data Quality reference](data_quality.md)
 
 
 ## Consume Data
 dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
 
-[Using SQL for Cleanse-to-Consume](using_sql.md)
+* [Using SQL for Cleanse-to-Consume](using_sql.md)
 
 
 ## Entity Match
@@ -192,6 +193,12 @@ grep ^CLM e02file > e02file-claims
 Sedgwick e02 Claim Interface File Option 2: use lambda split file function
 
 ## Roadmap
+
+- Installation UI/wizard
+- Configuration UI
+- GenAI schema mapping suggestions
 - Data Quality rule descriptions
 - Integrated Data Quality warning alerts
-
+- Iceberg support
+- Lakeformation integration and demo
+- GenBI demonstration and documentation 
