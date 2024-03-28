@@ -78,13 +78,13 @@ To set the region that InsuranceLake is installed in see the lib/configuration.p
 
 
 ## Collect Data
-dev-insurancelake-<account ID>-us-east-2-collect > <database name> > <table name>
+Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-collect`
 
 * [Detailed File Format and Input Specification Documentation](file_formats.md)
 
 
 ## Cleanse Data
-dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name>
+Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-cleanse`
 
 * [Detailed Schema Mapping Documentation](schema_mapping.md)
 * [Detailed Collect-to-Cleanse transform reference](transforms.md)
@@ -92,7 +92,7 @@ dev-insurancelake-<account ID>-us-east-2-cleanse > <database name> > <table name
 
 
 ## Consume Data
-dev-insurancelake-<account ID>-us-east-2-consume > <database name> > <table name>
+Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-consume`
 
 * [Using SQL for Cleanse-to-Consume](using_sql.md)
 
