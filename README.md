@@ -78,15 +78,15 @@ To set the region that InsuranceLake is installed in see the lib/configuration.p
 
 
 ## Collect Data
-Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-collect`
+* Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-collect`
 
 
 * [Detailed File Format and Input Specification Documentation](file_formats.md)
 
 
 ## Cleanse Data
-Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-cleanse`
-Glue Catalog Database and Table: `<level 1 folder name>.<level 2 folder name>`
+* Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-cleanse`
+* Glue Catalog Database and Table: `<level 1 folder name>.<level 2 folder name>`
 
 * [Detailed Schema Mapping Documentation](schema_mapping.md)
 * [Detailed Collect-to-Cleanse transform reference](transforms.md)
@@ -94,8 +94,8 @@ Glue Catalog Database and Table: `<level 1 folder name>.<level 2 folder name>`
 
 
 ## Consume Data
-Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-consume`
-Glue Catalog Database and Table: `<level 1 folder name>_consume.<level 2 folder name>`
+* Bucket name convention: `<environment>-insurancelake-<account ID>-<region>-consume`
+* Glue Catalog Database and Table: `<level 1 folder name>_consume.<level 2 folder name>`
 
 * [Using SQL for Cleanse-to-Consume](using_sql.md)
 
